@@ -3,7 +3,14 @@ from flask_sqlalchemy import SQLAlchemy # Base de Dados
 from flask_migrate import Migrate # Migrações
 from flask_login import LoginManager # Gestor de Sessões
 
+import os
+
 ############# * Geral * ############# 
+
+# Consts
+DB_NAME = "database.db"
+BASEDIR = os.path.abspath(os.path.dirname(__file__))
+DATABASE_PATH = f"{BASEDIR}/database/{DB_NAME}"
 
 # Create app
 app =  Flask(__name__)
@@ -12,7 +19,9 @@ app =  Flask(__name__)
 db = SQLAlchemy(app)
 
 # Configs
-from . import config
+app.secret_key = os.urandom(24)
+app.config['SECRET_KEY'] = os.urandom(24)
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DATABASE_PATH}'
 
 # Iniciar Base de Dados
 db.init_app(app)
