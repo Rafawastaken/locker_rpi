@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+<!-- Content -->
+{% block content %}
+<div class="container">
+  <!-- Header -->
+  <section class="header">
+    <div class="display-5 header__text header-blue-text">
+      Editar - {{user.nome.title()}}
+    </div>
+  </section>
+  <hr />
+  <section class="form">
+    <form method="POST">
+      {{form.csrf_token}}
+
+      <!-- Nome -->
+      <div class="mb-3">
+        <label class="dark-blue-text" for="nome">Nome</label>
+        {{form.nome(placeholder="Nome do Utilizador", value = user.nome,
+        class="form-control", )}}
+      </div>
+
+      <!-- Email -->
+      <div class="mb-3">
+        <label class="dark-blue-text" for="email">Endereço Email</label>
+        {{form.email(class="form-control", value = user.email,
+        placeholder="Endereço Email")}}
+      </div>
+
+      <!-- Password -->
+      <div class="mb-3">
+        <label class="dark-blue-text" for="password">Password</label>
+        {{form.password(class="form-control", placeholder="Password")}}
+      </div>
+
+      <!-- Repetir Password -->
+      <div class="mb-3">
+        <label class="dark-blue-text" for="password_2">Repetir Password</label>
+        {{form.password_2(placeholder="Repetir Password",
+        class="form-control")}}
+      </div>
+
+      <div class="form__controls">
+        <input
+          type="submit"
+          class="btn btn-primary form-control"
+          value="Adicionar"
+        />
+
+        <a
+          href="{{url_for('admin.utilizadores')}}"
+          class="btn btn-secondary form-control"
+        >
+          Voltar
+        </a>
+      </div>
+    </form>
+  </section>
+</div>
+
+{% endblock %}
