@@ -1,5 +1,6 @@
 from flask import Blueprint, request, url_for, redirect, render_template, flash
 from locker import app, db
+from flask_login import login_required
 
 from .models import Devices, Raspberry
 from .forms import NovoDispositivoForm
@@ -21,6 +22,7 @@ def flash_erros(erros):
 
 # Lista de dispositivos
 @devices.route("/")
+@login_required
 def landing():
     title = "Lista de Dispostivos Conectados"
     devices = Devices.query.all()
@@ -29,6 +31,7 @@ def landing():
 
 # Conectar novo dispositivo
 @devices.route("/adicionar-dispositivo", methods = ['POST', 'GET'])
+@login_required
 def conectar_dispositivo():
     title = "Adicionar Novo Dispositivo"
     form = NovoDispositivoForm()
@@ -45,3 +48,14 @@ def conectar_dispositivo():
         flash(f"Dispositivo {nome_disp} no pino {pin_rasp} adicionado com sucesso", "success")
         return redirect(url_for("devices.landing"))
     return render_template("devices/adicionar_device.html", title = title, form = form)
+
+# Apagar Dispositivo
+@devices.route("/apagar-dispositivo/<int:id>", methods = ['POST'])
+@login_required
+def apagar_dispositivo(id):
+    disp = Devices.query.get_or_404(id)
+    if disp:
+        db.session.delete(disp)
+        db.session.commit()
+        flash("Dispositivo removido do servidor.","success")
+        return redirect(url_for('devices.landing'))

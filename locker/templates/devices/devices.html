@@ -18,8 +18,8 @@
       >
         {% for device in devices %}
         <tr>
-          <td>{{device.nome.title()}}</td>
-          <td>{{device.pin}}</td>
+          <td title="Nome do dispositivo">{{device.nome.title()}}</td>
+          <td title="Pino de conexão">{{device.pin}}</td>
           <td>
             {% if device.estado %}
             <a
@@ -45,9 +45,15 @@
             ></a>
           </td>
           <td>
-            <a href="#" class="btn btn-danger btn-sm form-control">
+            <button
+              type="button"
+              class="btn btn-danger btn-sm form-control"
+              data-bs-toggle="modal"
+              data-bs-target="#apagar--{{device.id}}"
+            >
               <i class="bi bi-trash-fill"></i>
-            </a>
+            </button>
+            {% include '/devices/modal-apagar.html' %}
           </td>
         </tr>
         {% endfor %}
