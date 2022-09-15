@@ -24,8 +24,8 @@
             <a
               href="{{url_for('admin.editar', id = user.id)}}"
               class="btn btn-primary btn-sm form-control"
-              >Editar</a
-            >
+              ><i class="bi bi-pencil-fill"></i
+            ></a>
           </td>
           <td>
             {% if current_user.id == user.id %}
@@ -37,7 +37,7 @@
               title="Não pode apagar a sua conta atual"
               disabled
             >
-              Apagar
+              <i class="bi bi-trash-fill"></i>
             </button>
             {% else %}
             <button

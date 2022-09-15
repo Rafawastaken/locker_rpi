@@ -23,7 +23,9 @@ def flash_erros(erros):
 @devices.route("/")
 def landing():
     title = "Lista de Dispostivos Conectados"
-    return render_template('devices/devices.html', title = title)
+    devices = Devices.query.all()
+    return render_template('devices/devices.html', title = title, 
+        devices = devices)
 
 # Conectar novo dispositivo
 @devices.route("/adicionar-dispositivo", methods = ['POST', 'GET'])
