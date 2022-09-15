@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 <!-- Content -->
 {% block content %}
-<div class="container">
+<div class="container shadow p-3 bg-body rounded-bg my-3 border">
   <section class="header">
     <div class="display-5 header__text dark-blue-text">
       Olá {{current_user.nome.title()}}
@@ -9,11 +9,11 @@
   </section>
   <hr />
 
-  <section class="content mb-3">
+  <section class="content">
     <!-- Cards -->
     <div class="row row-cols-1 row-cols-md-3 g-4">
       <div class="col">
-        <div class="card border-secondary h-100">
+        <div class="card border h-100">
           <img
             src="{{url_for('static', filename='img/users.png')}}"
             class="card-img-top"
@@ -38,7 +38,7 @@
         </div>
       </div>
       <div class="col">
-        <div class="card h-100 border-secondary">
+        <div class="card h-100 border">
           <img
             src="{{url_for('static', filename='img/logs.png')}}"
             class="card-img-top"
@@ -59,7 +59,7 @@
         </div>
       </div>
       <div class="col">
-        <div class="card h-100 border-secondary">
+        <div class="card h-100 border">
           <img
             src="{{url_for('static', filename='img/control.png')}}"
             class="card-img-top"

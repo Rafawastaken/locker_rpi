@@ -22,7 +22,7 @@
 }
 
 body {
-  background-color: var(--dark-background);
+  background-color: #ddd;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 
@@ -33,6 +33,10 @@ hr {
 }
 
 /*********** Estilos ***********/
+
+.rounded-bg {
+  border-radius: 7px;
+}
 
 .dark-blue-text {
   color: var(--dark-blue);
@@ -170,7 +174,7 @@ hr {
 
 /*********** Login ***********/
 .wraper-login {
-  height: 100vh;
+  height: 85vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -180,5 +184,4 @@ hr {
 .content-login {
   width: 100%;
   padding: 2em;
-  border-radius: 15px;
 }

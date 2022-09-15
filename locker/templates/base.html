@@ -29,9 +29,8 @@
     <title>{{title}}</title>
   </head>
   <body>
-    {% if current_user.is_authenticated %}
     <!-- Navbar -->
-    {% include '/components/navbar.html' %} {% endif %}
+    {% include '/components/navbar.html' %}
     <!-- Flash -->
     {% include './components/messages.html' %}
     <!-- Content -->

@@ -2,7 +2,7 @@
 <!-- Content -->
 {% block content %}
 <div class="container wraper-login">
-  <div class="content-login shadow bg-body">
+  <div class="content-login shadow bg-body border rounded-bg">
     <div class="row mt-3">
       <div class="col-1"></div>
       <div class="col-10 text-center">
@@ -31,15 +31,20 @@
             </div>
 
             <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-6 mt-2">
                 <input
                   type="submit"
                   value="Iniciar Sessão"
-                  class="btn btn-primary form-control btn-flight"
+                  class="btn btn-sm btn-primary form-control btn-flight"
                 />
               </div>
-              <div class="col-md-4"></div>
-              <div class="col-md-4"></div>
+              <div class="col-md-6 mt-2">
+                <a
+                  href="#"
+                  class="btn btn-sm btn-secondary form-control btn-flight disabled"
+                  >Esqueceu-se da palavra-passe</a
+                >
+              </div>
             </div>
           </form>
         </section>
