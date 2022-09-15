@@ -40,7 +40,9 @@
             {% endif %}
           </td>
           <td>
-            <a href="#" class="btn btn-primary btn-sm form-control"
+            <a
+              href="{{url_for('devices.editar_dispositivo', id=device.id)}}"
+              class="btn btn-primary btn-sm form-control"
               ><i class="bi bi-pencil"></i
             ></a>
           </td>

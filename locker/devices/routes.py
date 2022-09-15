@@ -39,7 +39,7 @@ def conectar_dispositivo():
         nome_disp = form.nome.data
         pin_rasp = form.pin.data
         device = Devices.query.filter_by(pin = pin_rasp).first()
-        if device:
+        if device: # Verificar se algum dispositivo possui o pin a ser utilizado
             flash(f"Pino a ser utilizado por {device.nome}", "danger")
             return redirect(url_for('devices.conectar_dispositivo'))
         device_add = Devices(nome = nome_disp, pin = pin_rasp, estado = False)
@@ -48,6 +48,22 @@ def conectar_dispositivo():
         flash(f"Dispositivo {nome_disp} no pino {pin_rasp} adicionado com sucesso", "success")
         return redirect(url_for("devices.landing"))
     return render_template("devices/adicionar_device.html", title = title, form = form)
+
+# Editar Device
+@devices.route('/editar-dispositivo/<int:id>', methods = ['POST', 'GET'])
+@login_required
+def editar_dispositivo(id):
+    form = NovoDispositivoForm()
+    device = Devices.query.get_or_404(id)
+    title = f"Editar Dispositivo {device.nome}"
+    if form.validate_on_submit():
+        device.nome = form.nome.data
+        device.pin = form.pin.data
+        db.session.commit()
+        flash(f"{device.nome} atualizado com sucesso!", "success")
+        return redirect(url_for('devices.landing'))
+    return render_template('devices/editar-device.html', device = device,
+        title = title, form = form)    
 
 # Apagar Dispositivo
 @devices.route("/apagar-dispositivo/<int:id>", methods = ['POST'])
