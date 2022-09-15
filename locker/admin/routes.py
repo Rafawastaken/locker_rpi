@@ -69,12 +69,18 @@ def editar(id):
 
     return render_template('/admin/editar.html',user = user, title = title, form = form) 
 
-
 # Apagar Utilizador
 @admin.route('/apagar-user/<int:id>', methods = ["POST"])
 @login_required
 def apagar(id):
+    user = User.query.get_or_404(id)
+    if user and user.id != current_user.id:
+        db.session.delete(user)
+        db.session.commit()
+        flash("Utilizador removido com sucesso", "success")
+        return redirect(url_for('admin.utilizadores'))
     return redirect(url_for('admin.utilizadores'))
+    
 
 #################### * Session Manager * ####################
 
