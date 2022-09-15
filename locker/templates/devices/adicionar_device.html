@@ -13,31 +13,34 @@
 
       <!-- Nome -->
       <div class="row">
-        <div class="mb-3 col-8">
+        <div class="mb-3 col-6">
           <label class="dark-blue-text" for="nome">Nome</label>
           {{form.nome(placeholder="Nome do Utilizador", class="form-control
           input-color")}}
         </div>
 
         <!-- Email -->
-        <div class="mb-3 col-4">
+        <div class="mb-3 col-6">
           <label class="dark-blue-text" for="email">Pino Raspberry</label>
           {{form.pin(placeholder="", class="form-control input-color")}}
         </div>
       </div>
-      <div class="form__controls">
-        <input
-          type="submit"
-          class="btn btn-primary form-control"
-          value="Adicionar"
-        />
-
-        <a
-          href="{{url_for('admin.utilizadores')}}"
-          class="btn btn-secondary form-control"
-        >
-          Voltar
-        </a>
+      <div class="row">
+        <div class="col-md-6 mt-2">
+          <input
+            type="submit"
+            class="btn btn-primary form-control"
+            value="Adicionar"
+          />
+        </div>
+        <div class="col-md-6 mt-2">
+          <a
+            href="{{url_for('admin.utilizadores')}}"
+            class="btn btn-secondary form-control"
+          >
+            Voltar
+          </a>
+        </div>
       </div>
     </form>
   </section>
