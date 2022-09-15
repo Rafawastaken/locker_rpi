@@ -1,7 +1,8 @@
 # Custom
 venv/
 database/
-
+api/
+api.py
 update.py
 
 # Byte-compiled / optimized / DLL files

@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy # Base de Dados
 from flask_migrate import Migrate # Migrações
 from flask_bcrypt import Bcrypt # Criptografia
 from flask_login import LoginManager # Login
-
+from flask_restful import Api 
 import os
 
 ############# * Geral * ############# 
@@ -28,6 +28,9 @@ migrate = Migrate(app, db)
 
 # Encriptar Dados
 bcrypt = Bcrypt(app)
+
+# Api Module
+api = Api(app)
 
 # Login Manager
 login_manager = LoginManager()

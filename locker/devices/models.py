@@ -17,6 +17,6 @@ class Devices(db.Model):
 class Raspberry(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     nome = db.Column(db.String(50), nullable = False, unique = True)
-    seed = db.Column(db.String(50), nullable = False, unique = False)
+    key = db.Column(db.String(50), nullable = False, unique = False)
 
 db.create_all()
