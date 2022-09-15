@@ -1,7 +1,8 @@
 # Custom
 venv/
 database/
-creds.txt 
+
+update.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

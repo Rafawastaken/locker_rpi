@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+<!-- Content -->
+{% block content %}
+<div class="container">
+  <section class="header">
+    <div class="display-5 header__text dark-blue-text">Dispositivos</div>
+    <a
+      href="{{url_for('devices.conectar_dispositivo')}}"
+      class="btn btn-primary header__btn"
+      >Conectar</a
+    >
+  </section>
+  <hr />
+</div>
+{% endblock %}

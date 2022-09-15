@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+<!-- Content -->
+{% block content %}
+<div class="container">
+  <!-- Header -->
+  <section class="header">
+    <div class="display-5 header__text header-blue-text">Novo Dispositivo</div>
+  </section>
+  <hr />
+  <section class="form">
+    <form method="POST">
+      {{form.csrf_token}}
+
+      <!-- Nome -->
+      <div class="row">
+        <div class="mb-3 col-8">
+          <label class="dark-blue-text" for="nome">Nome</label>
+          {{form.nome(placeholder="Nome do Utilizador", class="form-control
+          input-color")}}
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3 col-4">
+          <label class="dark-blue-text" for="email">Pino Raspberry</label>
+          {{form.pin(placeholder="", class="form-control input-color")}}
+        </div>
+      </div>
+      <div class="form__controls">
+        <input
+          type="submit"
+          class="btn btn-primary form-control"
+          value="Adicionar"
+        />
+
+        <a
+          href="{{url_for('admin.utilizadores')}}"
+          class="btn btn-secondary form-control"
+        >
+          Voltar
+        </a>
+      </div>
+    </form>
+  </section>
+</div>
+
+{% endblock %}

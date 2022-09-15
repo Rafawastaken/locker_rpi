@@ -1,0 +1,169 @@
+/*********** Variaveis ***********/
+:root {
+  --dark-background: #fafafa;
+  --light-color: rgb(210, 210, 210);
+  --hr-dark-blue: #003251;
+  --blue-logo: #329ada;
+  --blue-btn: #1981c2;
+  --blue-hover: #1772ab;
+  --dark-blue: #1069a1;
+  --header-blue-text: #14689c;
+  --light-blue: rgb(0, 157, 255);
+  --input-blue: #165f84;
+  --focus-blue: #0665a1;
+  --placeholder-blue: #a1b2bd;
+}
+
+/*********** Tags Gerais ***********/
+
+* {
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--dark-background);
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+hr {
+  height: 1px;
+  background-color: var(--hr-dark-blue);
+  border: none;
+}
+
+/*********** Estilos ***********/
+
+.dark-blue-text {
+  color: var(--dark-blue);
+}
+
+.header-blue-text {
+  color: var(--header-blue-text);
+}
+
+.btn-flight {
+  font-weight: 300 !important;
+  font-size: 18px;
+}
+
+.input-color {
+  color: var(--input-blue);
+}
+
+.input-color:focus {
+  color: var(--focus-blue);
+}
+
+.input-color::placeholder {
+  color: var(--placeholder-blue);
+}
+
+.btn-primary {
+  background-color: var(--blue-btn);
+  border: 1px solid var(--blue-btn);
+  outline: none;
+}
+
+.btn-primary:hover {
+  background-color: var(--blue-hover);
+  border: 1px solid var(--blue-hover);
+}
+
+/*********** Navbar ***********/
+
+.nav-link-edited {
+  color: var(--light-color) !important;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease !important;
+}
+
+.nav-link-edited:hover {
+  color: var(--blue-logo) !important;
+  transition: all 0.3s ease !important;
+}
+
+/*********** Standard Tags ***********/
+
+/* Web */
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 1em;
+  align-items: center;
+}
+
+.header__btn {
+  padding: 0.5em 1.4em;
+  letter-spacing: 0.09em;
+  font-weight: 600;
+}
+
+.content__web {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 18px;
+}
+
+/* Apenas visivel em mobile */
+.content__mobile {
+  display: none;
+}
+
+/* Mobile */
+
+@media screen and (max-width: 600px) {
+  /* Desligar web version */
+  .content__web {
+    display: none;
+  }
+
+  .content__mobile {
+    display: initial;
+  }
+}
+
+/*********** Forms ***********/
+
+.form {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+.form__controls {
+  margin-top: 1.25em;
+  display: flex;
+  flex-direction: row;
+  gap: 3%;
+}
+
+@media screen and (max-width: 575px) {
+  .form__controls {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
+/*********** Modals ***********/
+
+.modal-dialog {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/*********** Landing ***********/
+
+.card-img-top {
+  width: 100%;
+  height: 15vw;
+  object-fit: scale-down;
+}
+
+@media screen and (max-width: 768px) {
+  .card-img-top {
+    height: 100%;
+    object-fit: cover;
+  }
+}
