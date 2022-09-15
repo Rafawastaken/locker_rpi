@@ -95,3 +95,10 @@ def login():
             return redirect(url_for("admin.login"))
     return render_template('/admin/login.html', title = title, form = form)
 
+# Logout
+@admin.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash("Sessão terminada com sucesso", "success")
+    return redirect(url_for("admin.login"))

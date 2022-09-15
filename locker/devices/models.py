@@ -9,14 +9,14 @@ from locker import db
 """
 
 class Devices(db.Model):
-    id=db.Column(db.Integer, primary_key=True)
-    nome=db.Column(db.String(50),unique=True, nullable=False)
-    pin=db.Column(db.Integer, unique=True, nullable=False)
-    estado=db.Column(db.Boolean, nullable=False)
+    id = db.Column(db.Integer, primary_key = True)
+    nome = db.Column(db.String(50),unique = True, nullable = False)
+    pin = db.Column(db.Integer, unique = True, nullable = False)
+    estado = db.Column(db.Boolean, nullable = False)
 
 class Raspberry(db.Model):
-    id=db.Column(db.Integer, primary_key=True)
-    nome=db.Column(db.String(50), nullable=False, unique=True)
-    seed=db.Column(db.String(50), nullable=False, unique=False)
+    id = db.Column(db.Integer, primary_key = True)
+    nome = db.Column(db.String(50), nullable = False, unique = True)
+    seed = db.Column(db.String(50), nullable = False, unique = False)
 
 db.create_all()

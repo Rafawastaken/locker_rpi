@@ -167,3 +167,18 @@ hr {
     object-fit: cover;
   }
 }
+
+/*********** Login ***********/
+.wraper-login {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.content-login {
+  width: 100%;
+  padding: 2em;
+  border-radius: 15px;
+}
