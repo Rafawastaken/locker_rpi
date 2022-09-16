@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy # Base de Dados
 from flask_migrate import Migrate # Migrações
 from flask_bcrypt import Bcrypt # Criptografia
 from flask_login import LoginManager # Login
-from flask_restful import Api 
+from flask_restful import Api # Api
 import os
 
 ############# * Geral * ############# 
@@ -29,9 +29,6 @@ migrate = Migrate(app, db)
 # Encriptar Dados
 bcrypt = Bcrypt(app)
 
-# Api Module
-api = Api(app)
-
 # Login Manager
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -46,9 +43,20 @@ login_manager.login_message = u'Necessário efetuar login para visualizar esta p
 from .home.routes import home
 from .admin.routes import admin
 from .devices.routes import devices
+from .api.api import api_bp
 
+# Api
+api = Api(api_bp) 
 
 ############# * Paths * ############# 
 app.register_blueprint(home, url_prefix = '/') # Landing page
 app.register_blueprint(admin, url_prefix = '/utilizadores') # Admin, landing
 app.register_blueprint(devices, url_prefix = '/dispositivos') # Admin, landing
+app.register_blueprint(api_bp)
+
+############# * Models Api * #############
+from .api.api import GetDeviceStatus, PatchDeviceStatus
+
+############# * API Endpoints * #############
+api.add_resource(GetDeviceStatus, "/devices_status")
+api.add_resource(PatchDeviceStatus, "/device_patch/<int:device_pin>")

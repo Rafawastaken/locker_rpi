@@ -22,21 +22,31 @@
           <td title="Pino de conexão">{{device.pin}}</td>
           <td>
             {% if device.estado %}
-            <a
-              href="#"
-              class="btn btn-sm btn-danger form-control"
-              title="Carregar para desligar"
+            <form
+              action="{{url_for('devices.toggle', id = device.id)}}"
+              method="POST"
             >
-              <i class="fs-3 bi bi-toggle-off"></i>
-            </a>
+              <button
+                type="submit"
+                class="btn btn-sm btn-danger form-control"
+                title="Carregar para desligar"
+              >
+                <i class="bi bi-toggle-off"></i>
+              </button>
+            </form>
             {% else %}
-            <a
-              href="#"
-              class="btn btn-sm btn-success form-control"
-              title="Carregar para ligar"
+            <form
+              action="{{url_for('devices.toggle', id = device.id)}}"
+              method="POST"
             >
-              <i class="bi bi-toggle-on"></i>
-            </a>
+              <button
+                type="submit"
+                class="btn btn-sm btn-success form-control"
+                title="Carregar para ligar"
+              >
+                <i class="bi bi-toggle-on"></i>
+              </button>
+            </form>
             {% endif %}
           </td>
           <td>
@@ -75,21 +85,31 @@
                   <h5 class="card-title">{{device.nome.title()}}</h5>
 
                   {% if device.estado %}
-                  <a
-                    href="#"
-                    class="btn btn-sm btn-danger form-control"
-                    title="Carregar para desligar"
+                  <form
+                    action="{{url_for('devices.toggle', id = device.id)}}"
+                    method="post"
                   >
-                    <i class="fs-3 bi bi-toggle-off"></i>
-                  </a>
+                    <button
+                      type="submit"
+                      class="btn btn-sm btn-danger form-control"
+                      title="Carregar para desligar"
+                    >
+                      <i class="bi bi-toggle-off"></i>
+                    </button>
+                  </form>
                   {% else %}
-                  <a
-                    href="#"
-                    class="btn btn-sm btn-success form-control"
-                    title="Carregar para ligar"
+                  <form
+                    action="{{url_for('devices.toggle', id = device.id)}}"
+                    method="post"
                   >
-                    <i class="bi bi-toggle-on"></i>
-                  </a>
+                    <button
+                      type="submit"
+                      class="btn btn-sm btn-success form-control"
+                      title="Carregar para ligar"
+                    >
+                      <i class="bi bi-toggle-on"></i>
+                    </button>
+                  </form>
                   {% endif %}
                 </div>
                 <div class="col-5">

@@ -19,8 +19,8 @@ def flash_erros(erros):
 
 # Landing Page 
 @home.route('/')
-@login_required
+@login_required 
 def landing():
-    title = "Lista de Utilizadores Autorizados"
+    title = "Tek 4 Door | Servidor de Domótica"
     return render_template('/home/landing.html', title = title)
 

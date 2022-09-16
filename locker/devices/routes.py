@@ -5,6 +5,8 @@ from flask_login import login_required
 from .models import Devices, Raspberry
 from .forms import NovoDispositivoForm
 
+import requests
+
 devices = Blueprint('devices', __name__)
 
 
@@ -18,7 +20,7 @@ def flash_erros(erros):
             flash(f'{value}', "danger")
 
 
-#################### * Utilizadores * ####################
+#################### * Dispositivos * ####################
 
 # Lista de dispositivos
 @devices.route("/")
@@ -74,4 +76,21 @@ def apagar_dispositivo(id):
         db.session.delete(disp)
         db.session.commit()
         flash("Dispositivo removido do servidor.","success")
+        return redirect(url_for('devices.landing'))
+
+
+#################### * Interaçoes c/ Devices * ####################
+
+@devices.route("/toggle-device/<int:id>", methods = ['POST'])
+def toggle(id):
+    device = Devices.query.get_or_404(id)
+    if request.method == "POST":
+        endpoint = f"http://127.0.0.1:5000/device_patch/{device.pin}"
+        status = not device.estado
+        r = requests.patch(endpoint, {'status': status})
+        if r.status_code == 200:
+            if status: flash(f"{device.nome} acionado com sucesso!", "success")
+            if not status: flash(f"{device.nome} desacionado com sucesso!", "success")
+        else:
+            flash("Algo errado aconteceu durante envio do comando", "danger")
         return redirect(url_for('devices.landing'))
