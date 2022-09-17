@@ -1,9 +1,9 @@
 from flask import Blueprint, request, url_for, redirect, render_template, flash
-from locker import app, db
+from locker import app, db, bcrypt
 from flask_login import login_required
 
-from .models import Devices, Autorizados
-from .forms import NovoDispositivoForm, DispositivoAutorizadoForm
+from .models import Devices, Controladores
+from .forms import AdicionarDispositivoForm, AdicionarControladorForm
 
 import requests
 
@@ -20,16 +20,39 @@ def flash_erros(erros):
             flash(f'{value}', "danger")
 
 
-############# * Dispositivos Autorizados * ##############
+#################### * Controladores * ####################
 
-# Adicionar Dispositivo
-@devices.route("/adicionar-dispositivo-autorizado")
+# Lista de Controladores
+@devices.route('/controladores')
 @login_required
-def adicionar_autorizado():
-    title = "Adicionar Dispositivo Autorizado"
-    form = DispositivoAutorizadoForm()
-    return render_template('dispositivos/devices/adicionar_autorizados.html', title = title,
-        form = form)
+def controladores():
+    title = "Lista de Controladores"
+    controladores = Controladores.query.all()
+    return render_template('dispositivos/controladores/controladores.html',
+        title = title, controladores = controladores)
+
+# Adicionar Controlador
+@devices.route("/adicionar-controlador", methods = ['POST', 'GET'])
+@login_required
+def adicionar_controlador():
+    title = "Adicionar Controlador"
+    form = AdicionarControladorForm()
+    if form.validate_on_submit():
+        nome = form.nome.data
+        codigo =  bcrypt.generate_password_hash(form.access_code.data)
+       
+        # Adicionar novo controlador
+        novo_controlador = Controladores(nome = nome, key = codigo)
+        db.session.add(novo_controlador)
+        db.session.commit()
+
+        flash(f"{nome} adicionado com sucesso!", "success")
+        return redirect(url_for('devices.controladores'))
+
+    else:
+        flash_erros(form.errors.items())
+    return render_template('dispositivos/controladores/adicionar_controlador.html',
+        title = title, form = form)
 
 
 #################### * Dispositivos * ####################
@@ -48,7 +71,7 @@ def landing():
 @login_required
 def conectar_dispositivo():
     title = "Adicionar Novo Dispositivo"
-    form = NovoDispositivoForm()
+    form = AdicionarDispositivoForm()
     if form.validate_on_submit():
         nome_disp = form.nome.data
         pin_rasp = form.pin.data
@@ -67,7 +90,7 @@ def conectar_dispositivo():
 @devices.route('/editar-dispositivo/<int:id>', methods = ['POST', 'GET'])
 @login_required
 def editar_dispositivo(id):
-    form = NovoDispositivoForm()
+    form = AdicionarDispositivoForm()
     device = Devices.query.get_or_404(id)
     title = f"Editar Dispositivo {device.nome}"
     if form.validate_on_submit():

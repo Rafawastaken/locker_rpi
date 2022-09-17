@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+<!-- Content -->
+{% block content %}
+<div class="container shadow p-3 bg-body my-3 border rounded-bg">
+  <section class="header">
+    <div class="display-5 header__text dark-blue-text">Controladores</div>
+    <a
+      href="{{url_for('devices.adicionar_controlador')}}"
+      class="btn btn-primary header__btn"
+      >Adicionar</a
+    >
+  </section>
+  <hr />
+  <section class="content mb-3">
+    <!-- Web -->
+    <!-- Mobile view -->
+  </section>
+</div>
+{% endblock %}
