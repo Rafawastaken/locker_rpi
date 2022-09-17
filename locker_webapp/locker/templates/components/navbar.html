@@ -33,13 +33,27 @@
         <li class="nav-item">
           <a class="nav-link nav-link-edited" href="#">Registos</a>
         </li>
-        <li class="nav-item">
+        <!-- Droptdown -->
+        <li class="nav-item dropdown">
           <a
-            class="nav-link nav-link-edited"
-            href="{{url_for('devices.landing')}}"
-            >Controlar</a
+            class="nav-link dropdown-toggle nav-link-edited"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
           >
+            Interagir
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href="{{url_for('devices.landing')}}"
+                >Dispositivos</a
+              >
+            </li>
+            <li><a class="dropdown-item" href="#">Controladores</a></li>
+          </ul>
         </li>
+        <!-- Fim Dropdown -->
       </ul>
       <form class="d-flex" role="search">
         <a

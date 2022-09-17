@@ -2,8 +2,8 @@ from flask import Blueprint, request, url_for, redirect, render_template, flash
 from locker import app, db
 from flask_login import login_required
 
-from .models import Devices, Raspberry
-from .forms import NovoDispositivoForm
+from .models import Devices, Autorizados
+from .forms import NovoDispositivoForm, DispositivoAutorizadoForm
 
 import requests
 
@@ -20,6 +20,18 @@ def flash_erros(erros):
             flash(f'{value}', "danger")
 
 
+############# * Dispositivos Autorizados * ##############
+
+# Adicionar Dispositivo
+@devices.route("/adicionar-dispositivo-autorizado")
+@login_required
+def adicionar_autorizado():
+    title = "Adicionar Dispositivo Autorizado"
+    form = DispositivoAutorizadoForm()
+    return render_template('dispositivos/devices/adicionar_autorizados.html', title = title,
+        form = form)
+
+
 #################### * Dispositivos * ####################
 
 # Lista de dispositivos
@@ -28,7 +40,7 @@ def flash_erros(erros):
 def landing():
     title = "Lista de Dispostivos Conectados"
     devices = Devices.query.all()
-    return render_template('devices/devices.html', title = title, 
+    return render_template('dispositivos/devices/devices.html', title = title, 
         devices = devices)
 
 # Conectar novo dispositivo
@@ -49,7 +61,7 @@ def conectar_dispositivo():
         db.session.commit()
         flash(f"Dispositivo {nome_disp} no pino {pin_rasp} adicionado com sucesso", "success")
         return redirect(url_for("devices.landing"))
-    return render_template("devices/adicionar_device.html", title = title, form = form)
+    return render_template("dispositivos/devices/adicionar_device.html", title = title, form = form)
 
 # Editar Device
 @devices.route('/editar-dispositivo/<int:id>', methods = ['POST', 'GET'])
@@ -64,7 +76,7 @@ def editar_dispositivo(id):
         db.session.commit()
         flash(f"{device.nome} atualizado com sucesso!", "success")
         return redirect(url_for('devices.landing'))
-    return render_template('devices/editar-device.html', device = device,
+    return render_template('dispositivos/devices/editar-device.html', device = device,
         title = title, form = form)    
 
 # Apagar Dispositivo
