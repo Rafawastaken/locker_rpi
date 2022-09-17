@@ -1,0 +1,42 @@
+<div class="content__web">
+  <table
+    class="table table-striped table-secondary table-hover table-condensed table-bordered text-center"
+  >
+    {% for user in users %}
+    <tr>
+      <td>{{user.nome.title()}}</td>
+      <td>{{user.email.lower()}}</td>
+      <td>
+        <a
+          href="{{url_for('admin.editar', id = user.id)}}"
+          class="btn btn-primary btn-sm form-control"
+          ><i class="bi bi-pencil-fill"></i
+        ></a>
+      </td>
+      <td>
+        {% if current_user.id == user.id %}
+        <button
+          type="button"
+          class="btn btn-danger btn-sm form-control disabled"
+          data-bs-toggle="modal"
+          data-bs-target="#apagar--{{user.id}}"
+          title="Não pode apagar a sua conta atual"
+          disabled
+        >
+          <i class="bi bi-trash-fill"></i>
+        </button>
+        {% else %}
+        <button
+          type="button"
+          class="btn btn-danger btn-sm form-control"
+          data-bs-toggle="modal"
+          data-bs-target="#apagar--{{user.id}}"
+        >
+          Apagar
+        </button>
+        {% endif %} {% include '/admin/components/modal_apagar.html' %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
