@@ -8,7 +8,8 @@ def toggle(pin, status):
     GPIO.setup(pin, GPIO.OUT)
     if status:
         GPIO.output(pin, GPIO.HIGH)
-    GPIO.output(pin, GPIO.LOW) 
+    else:
+        GPIO.output(pin, GPIO.LOW) 
     
 
 def get_status():
