@@ -153,12 +153,8 @@ def apagar_dispositivo(id):
 def toggle(id):
     device = Devices.query.get_or_404(id)
     if request.method == "POST":
-        endpoint = f"http://127.0.0.1:5000/device_patch/{device.pin}"
-        status = not device.estado
-        r = requests.patch(endpoint, {'status': status})
-        if r.status_code == 200:
-            if status: flash(f"{device.nome} acionado com sucesso!", "success")
-            if not status: flash(f"{device.nome} desacionado com sucesso!", "success")
-        else:
-            flash("Algo errado aconteceu durante envio do comando", "danger")
-        return redirect(url_for('devices.dispositivos'))
+        device.estado = not device.estado
+        db.session.commit()
+        if device.estado: flash(f"{device.nome} acionado com sucesso!", "success")
+        if not device.estado: flash(f"{device.nome} desacionado com sucesso!", "success")
+    return redirect(url_for('devices.dispositivos'))
