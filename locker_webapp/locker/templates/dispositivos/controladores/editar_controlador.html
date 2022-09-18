@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+<!-- Content -->
+{% block content %}
+<div class="container container shadow p-3 bg-body my-3 border rounded-bg">
+  <!-- Header -->
+  <section class="header">
+    <div class="header__text header-blue-text">
+      <div class="display-5">Novo Dispositivo</div>
+      <div class="text-muted">Adicionar Código de Acesso -</div>
+    </div>
+  </section>
+  <hr />
+  <section class="form">
+    <form method="POST">
+      {{form.csrf_token}}
+
+      <!-- Nome -->
+      <div class="mb-3">
+        <label class="dark-blue-text" for="nome">Nome</label>
+        {{form.nome(placeholder="Nome do Controlador", class="form-control
+        input-color", value = controlador.nome)}}
+      </div>
+
+      <div class="row">
+        <!-- Codigo de Acesso -->
+        <div class="mb-3 col-6">
+          <label class="dark-blue-text" for="email">Código de Acesso</label>
+          {{form.access_code(placeholder="Código de Acesso", class="form-control
+          input-color")}}
+        </div>
+
+        <!-- Repetir Codigo de Acesso -->
+        <div class="mb-3 col-6">
+          <label class="dark-blue-text" for="email"
+            >Repetir Código de Acesso</label
+          >
+          {{form.access_code_2(placeholder="Repetir código de Acesso",
+          class="form-control input-color")}}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mt-2">
+          <input
+            type="submit"
+            class="btn btn-primary form-control"
+            value="Editar"
+          />
+        </div>
+        <div class="col-md-6 mt-2">
+          <a
+            href="{{url_for('admin.utilizadores')}}"
+            class="btn btn-secondary form-control"
+          >
+            Voltar
+          </a>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>
+
+{% endblock %}

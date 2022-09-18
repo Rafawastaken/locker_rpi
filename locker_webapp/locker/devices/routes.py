@@ -48,12 +48,26 @@ def adicionar_controlador():
 
         flash(f"{nome} adicionado com sucesso!", "success")
         return redirect(url_for('devices.controladores'))
-
     else:
         flash_erros(form.errors.items())
     return render_template('dispositivos/controladores/adicionar_controlador.html',
         title = title, form = form)
 
+# Editar Controlador
+@devices.route('/editar-controlador/<int:id>', methods = ['POST', 'GET'])
+@login_required
+def editar_controlador(id):
+    title = "Editar Controlador"
+    controlador = Controladores.query.get_or_404(id)
+    form = AdicionarControladorForm()
+    if form.validate_on_submit():
+        controlador.nome = form.nome.data
+        controlador.key = bcrypt.generate_password_hash(form.access_code.data)
+        db.session.commit()
+        flash(f"Controlador {form.nome.data} editar com sucesso!", "success")
+        return redirect(url_for('devices.controladores'))
+    return render_template('dispositivos/controladores/editar_controlador.html',
+        title = title, controlador = controlador, form = form)
 
 #################### * Dispositivos * ####################
 

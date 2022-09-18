@@ -1,0 +1,41 @@
+<div class="content__mobile">
+  <div class="row">
+    {% for controlador in controladores %}
+    <div class="col-12 mb-3 w-100">
+      <div class="card" style="width: 100%">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-8">
+              <h5 class="card-title">{{controlador.nome.title()}}</h5>
+              <p class="text-muted">Dispositivos: 12</p>
+            </div>
+            <div class="col-4">
+              <div class="row d-flex h-100 align-items-center flex-row">
+                <div class="col-6">
+                  <a
+                    href="{{url_for('devices.editar_controlador', id = controlador.id)}}"
+                    class="btn btn-primary btn-sm form-control"
+                    ><i class="bi bi-pencil"></i
+                  ></a>
+                </div>
+                <div class="col-6">
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm form-control"
+                    data-bs-toggle="modal"
+                    data-bs-target="#apagar--{{controlador.id}}"
+                  >
+                    <i class="bi bi-trash-fill"></i>
+                  </button>
+                  {% include
+                  'dispositivos/controladores/components/modal-apagar.html' %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
