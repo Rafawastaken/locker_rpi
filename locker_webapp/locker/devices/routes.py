@@ -66,15 +66,30 @@ def editar_controlador(id):
         db.session.commit()
         flash(f"Controlador {form.nome.data} editar com sucesso!", "success")
         return redirect(url_for('devices.controladores'))
+    else: 
+        flash_erros(form.errors.items())
     return render_template('dispositivos/controladores/editar_controlador.html',
         title = title, controlador = controlador, form = form)
+
+# Apagar Controlador
+@devices.route('/apagar-controlador/<int:id>', methods = ['POST'])
+@login_required
+def apagar_controlador(id):
+    controlador = Controladores.query.get_or_404(id)
+    if not controlador:
+        flash("Impossível apagar o controlador requisitado...", "danger")
+        return redirect(url_for('devices.controladores'))
+    db.session.delete(controlador)
+    db.session.commit()
+    flash(f"Controlador {controlador.nome} removido com sucesso!", "success")
+    return redirect(url_for('devices.controladores'))
 
 #################### * Dispositivos * ####################
 
 # Lista de dispositivos
 @devices.route("/")
 @login_required
-def landing():
+def dispositivos():
     title = "Lista de Dispostivos Conectados"
     devices = Devices.query.all()
     return render_template('dispositivos/devices/devices.html', title = title, 
@@ -97,7 +112,9 @@ def conectar_dispositivo():
         db.session.add(device_add)
         db.session.commit()
         flash(f"Dispositivo {nome_disp} no pino {pin_rasp} adicionado com sucesso", "success")
-        return redirect(url_for("devices.landing"))
+        return redirect(url_for("devices.dispositivos"))
+    else:
+        flash_erros(form.errors.items())
     return render_template("dispositivos/devices/adicionar_device.html", title = title, form = form)
 
 # Editar Device
@@ -112,7 +129,7 @@ def editar_dispositivo(id):
         device.pin = form.pin.data
         db.session.commit()
         flash(f"{device.nome} atualizado com sucesso!", "success")
-        return redirect(url_for('devices.landing'))
+        return redirect(url_for('devices.dispositivos'))
     return render_template('dispositivos/devices/editar-device.html', device = device,
         title = title, form = form)    
 
@@ -121,11 +138,13 @@ def editar_dispositivo(id):
 @login_required
 def apagar_dispositivo(id):
     disp = Devices.query.get_or_404(id)
-    if disp:
-        db.session.delete(disp)
-        db.session.commit()
-        flash("Dispositivo removido do servidor.","success")
-        return redirect(url_for('devices.landing'))
+    if not disp:
+        flash("Impossível apagar o dispositivo requisitado ", "danger")
+        return redirect(url_for("devices.dispositivos"))
+    db.session.delete(disp)
+    db.session.commit()
+    flash("Dispositivo removido do servidor.","success")
+    return redirect(url_for('devices.dispositivos'))
 
 
 #################### * Interaçoes c/ Devices * ####################
@@ -142,4 +161,4 @@ def toggle(id):
             if not status: flash(f"{device.nome} desacionado com sucesso!", "success")
         else:
             flash("Algo errado aconteceu durante envio do comando", "danger")
-        return redirect(url_for('devices.landing'))
+        return redirect(url_for('devices.dispositivos'))
