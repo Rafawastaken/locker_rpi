@@ -5,8 +5,6 @@ from flask_login import login_required
 from .models import Devices, Controladores
 from .forms import AdicionarDispositivoForm, AdicionarControladorForm
 
-import requests
-
 devices = Blueprint('devices', __name__)
 
 
