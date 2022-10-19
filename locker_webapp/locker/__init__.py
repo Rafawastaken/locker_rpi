@@ -4,7 +4,7 @@ from flask_migrate import Migrate # Migrações
 from flask_bcrypt import Bcrypt # Criptografia
 from flask_login import LoginManager # Login
 from flask_restful import Api # Api
-from flask_httpauth import HTTPBasicAuth
+from flask_httpauth import HTTPBasicAuth #  Auth
 import os
 
 ############# * Geral * ############# 
