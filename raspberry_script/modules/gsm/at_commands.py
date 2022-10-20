@@ -21,7 +21,8 @@ def saldo_cartao(gsm):
         time.sleep(1)
         x = x + 1
 
-    return resp.split("\n")[2][1:]
+    saldo = resp.split("\n")[2][1:] 
+    return saldo
 
 saldo = saldo_cartao(port)
 print(saldo)
