@@ -1,7 +1,12 @@
 from modules.gsm.sim900_driver import GSM_Comunication
+import json
 
 
-gsm = GSM_Comunication("COM3")
-saldo = gsm.saldo_cartao()
+def main():
+    creds = json.load("creds.json")
+    print(creds)
 
-print(saldo)
+if __name__ == '__main__':
+    main()
+
+
