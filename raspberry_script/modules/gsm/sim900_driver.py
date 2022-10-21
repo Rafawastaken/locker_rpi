@@ -8,7 +8,6 @@
     ...
 """
 
-
 from time import sleep
 import serial
 import sys
@@ -21,6 +20,7 @@ class GSM_Comunication:
         self.baudrate = baudrate
         self.timeout = timeout
         self.destinatario = destinatario
+        self.max_recursions = 0
 
         # GSM Serial Driver
         self.gsm = serial.Serial(
@@ -31,6 +31,8 @@ class GSM_Comunication:
         # Setup Text Mode
         self.gsm.write('AT+CMFG=1\r'.encode())
         
+    def notificar_erro(e):
+        print(e)
 
     # Self enviar mensagem com estado do gsm / fechadura
     def enviar_msg(self, mensagem):
@@ -47,14 +49,21 @@ class GSM_Comunication:
         print("Verificar saldo do cartão")
         self.resp = self.gsm.read(1000).decode()
         self.gsm.write('AT+CUSD=1,"*111#",15\r'.encode())
-        self.attempts = 0
+        attempts = 0
 
         while 'EUR' not in self.resp:
-            if self.attempts == 10: 
-                print("Impossivel de obter saldo, tentar novamente")
+            if attempts == 10: 
+                # 10 Tentativas por recursion
+                print("Impossivel de obter saldo a tentar novamente")
                 self.saldo_cartao()
+                
+                # Maximo de 3 recursions permitidas
+                self.max_recursions = self.max_recursions + 1
+                if self.max_recursions == 3:
+                    return "Impossivel de obter saldo tente novamente mais tarde"
+
             self.resp = self.gsm.read(1000).decode()
-            self.attempts = self.attempts + 1
+            attempts = attempts + 1
 
         # String manip. para isolar saldo da msg
         self.saldo = self.resp.split("\n")[2][1:]   
@@ -63,7 +72,8 @@ class GSM_Comunication:
         if "EUR" not in self.saldo:
             self.saldo_cartao()
 
-        self.enviar_msg(f'{self.saldo}')
+        self.enviar_msg(f'{self.saldo}') # Enviar mensagem com saldo
+        self.max_recursions = 0 # Recursions reset
         return self.saldo
 
     # Funcao que aguarda receber mensagem e retorna o seu conteudo
@@ -101,7 +111,11 @@ class GSM_Comunication:
                     return self.msg_clean
 
                 except Exception as e:
-                    self.notificar_erro()
+                    self.notificar_erro(e)
 
                 except KeyboardInterrupt:
                     sys.exit(1) # break while True
+
+"""
+    Processamento de mensagem
+"""

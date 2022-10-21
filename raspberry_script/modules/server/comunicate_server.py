@@ -2,19 +2,14 @@ import requests
 import json
 import os
 
-class Tek4DoorCom:
-    def __init__(self,  link):
+class ComunicarServidor:
+    def __init__(self,  link, username, password):
         self.link = link
-        self.username, self.password = self.get_creds()
+        self.username = username
+        self.password = password
 
         # Utilizado para HTTP Auth
         self.auth = (self.username, self.password) 
-
-    ### * Obtém as credencias de creds.json
-    def get_creds(self):
-        file = open(os.path.abspath(os.path.dirname(__file__)) + "\\creds.json")
-        content = json.load(file)
-        return content['username'], content['password'] 
 
     ### * Enviar Get Request
     def get_status(self):
