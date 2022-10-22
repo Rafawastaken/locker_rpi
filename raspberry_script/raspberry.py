@@ -17,10 +17,7 @@ def read_creds():
 
 def main():
     api, gsm, keypad = read_creds()
-
-    gpios = ControlarGpios()
-    gpios.toggle(2)
-    """
+    
     gsm_creds = gsm['destinatario']
     gsm_driver = DriverSIM900("COM3", gsm_creds)
 
@@ -29,7 +26,7 @@ def main():
         if mensagem: 
             ProcessarMensagem(gsm_driver, gsm_creds, mensagem)
             print("-" * 30)
-    """
+    
 
 if __name__ == '__main__':
     main()
