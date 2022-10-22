@@ -5,12 +5,12 @@
         - SALDO
             -> Responde com mensagen saldo atual
 
-        - ABRIR #x
+        - ABRIR -> abrir#1
             -> Abrir porta X
             -> Responde com "porta aberta"
             -> Responde com "porta fechada"
 
-        - CODIGO1 ATUAL NOVO
+        - CODIGO -> codigo#codigo_antigo#novo_codigo
             -> Altera codigo atual para novo codigo 
             -> Responde com codigo alterdo com sucesso
 """
@@ -50,8 +50,8 @@ class ProcessarMensagem:
             self.driver.enviar_msg(saldo_atual) # Envia mensagem com saldo
 
         # Processar pedido para controlar portas
-        elif "abrir porta" in self.conteudo:
-            porta_selecionada = self.conteudo.split()[-1]    
+        elif "abrir" in self.conteudo:
+            porta_selecionada = self.conteudo.split("#")[-1]    
             # * Codigo para acionar relé * 
             self.driver.enviar_msg(f"Porta {porta_selecionada} aberta")
             # * Codigo para desacionar relé 
@@ -60,7 +60,7 @@ class ProcessarMensagem:
         # Processar pedido para altearar codigo de keypad
         elif "codigo" in self.conteudo:
             try:
-                parser = self.conteudo.split()
+                parser = self.conteudo.split("#")
                 codigo_antigo = parser[1]
                 codigo_novo = parser[2]
 

@@ -31,6 +31,7 @@ class DriverSIM900:
         # Setup Text Mode
         self.gsm.write('AT+CMFG=1\r'.encode())
 
+
     # Self enviar mensagem com estado do gsm / fechadura
     def enviar_msg(self, mensagem):
             print(f"Enviar mensagem: '{mensagem}' para {self.destinatario}")
@@ -41,6 +42,7 @@ class DriverSIM900:
 
             return "Mensagem enviada com sucesso"
 
+
     # Funcao para receber o saldo atual do cartão
     def saldo_cartao(self):
         print("Verificar saldo do cartão")
@@ -50,13 +52,13 @@ class DriverSIM900:
 
         while 'EUR' not in self.resp:
             print(attempts)
-            if attempts == 3: 
+            if attempts >= 3: 
                 # 10 Tentativas por recursion
                 print(f"Impossivel de obter saldo a tentar novamente - {self.max_recursions}")
                 
                 # Maximo de 3 recursions permitidas
                 self.max_recursions = self.max_recursions + 1
-                if self.max_recursions == 3:
+                if attempts >= 5:
                     return "Impossivel de obter saldo tente novamente mais tarde"
     
                 self.saldo_cartao()
@@ -72,6 +74,7 @@ class DriverSIM900:
 
         self.max_recursions = 0 # Recursions reset
         return self.saldo
+
 
     # Funcao que aguarda receber mensagem e retorna o seu conteudo
     def receber_msg(self):         
