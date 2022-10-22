@@ -13,7 +13,7 @@ import serial
 import sys
 
 # Driver para SIM900
-class GSM_Comunication:
+class DriverSIM900:
     # port -> porta serial utilizada
     def __init__(self, port, destinatario, baudrate = 9600, timeout = 1):
         self.port = port
@@ -30,13 +30,10 @@ class GSM_Comunication:
 
         # Setup Text Mode
         self.gsm.write('AT+CMFG=1\r'.encode())
-        
-    def notificar_erro(e):
-        print(e)
 
     # Self enviar mensagem com estado do gsm / fechadura
     def enviar_msg(self, mensagem):
-            print(f"Enviar mensagem: {mensagem} para {self.destinatario}")
+            print(f"Enviar mensagem: '{mensagem}' para {self.destinatario}")
             self.gsm.write(f'AT+CMGS="{self.destinatario}"\r'.encode())
             sleep(1)
             self.gsm.write((mensagem + chr(26)+ "\r").encode())
@@ -52,15 +49,17 @@ class GSM_Comunication:
         attempts = 0
 
         while 'EUR' not in self.resp:
-            if attempts == 10: 
+            print(attempts)
+            if attempts == 3: 
                 # 10 Tentativas por recursion
-                print("Impossivel de obter saldo a tentar novamente")
-                self.saldo_cartao()
+                print(f"Impossivel de obter saldo a tentar novamente - {self.max_recursions}")
                 
                 # Maximo de 3 recursions permitidas
                 self.max_recursions = self.max_recursions + 1
                 if self.max_recursions == 3:
                     return "Impossivel de obter saldo tente novamente mais tarde"
+    
+                self.saldo_cartao()
 
             self.resp = self.gsm.read(1000).decode()
             attempts = attempts + 1
@@ -69,10 +68,8 @@ class GSM_Comunication:
         self.saldo = self.resp.split("\n")[2][1:]   
         
         # Recursion para certificar que saldo está contido
-        if "EUR" not in self.saldo:
-            self.saldo_cartao()
+        if "EUR" not in self.saldo: self.saldo_cartao()
 
-        self.enviar_msg(f'{self.saldo}') # Enviar mensagem com saldo
         self.max_recursions = 0 # Recursions reset
         return self.saldo
 
@@ -111,11 +108,7 @@ class GSM_Comunication:
                     return self.msg_clean
 
                 except Exception as e:
-                    self.notificar_erro(e)
+                    print(e)
 
                 except KeyboardInterrupt:
                     sys.exit(1) # break while True
-
-"""
-    Processamento de mensagem
-"""
