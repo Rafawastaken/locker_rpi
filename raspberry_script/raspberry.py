@@ -1,5 +1,6 @@
 from modules.gsm.sim900_driver import DriverSIM900
 from modules.gsm.processar_mensagem import ProcessarMensagem
+from modules.ios.control_gpios import ControlarGpios
 import json
 
 # Ler creds
@@ -17,6 +18,9 @@ def read_creds():
 def main():
     api, gsm, keypad = read_creds()
 
+    gpios = ControlarGpios()
+    gpios.toggle(2)
+    """
     gsm_creds = gsm['destinatario']
     gsm_driver = DriverSIM900("COM3", gsm_creds)
 
@@ -25,6 +29,7 @@ def main():
         if mensagem: 
             ProcessarMensagem(gsm_driver, gsm_creds, mensagem)
             print("-" * 30)
+    """
 
 if __name__ == '__main__':
     main()

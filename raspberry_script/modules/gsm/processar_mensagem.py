@@ -14,10 +14,16 @@
             -> Altera codigo atual para novo codigo 
             -> Responde com codigo alterdo com sucesso
 """
+# Controlar GPIOS 
+from modules.ios.control_gpios import ControlarGpios
 
 class ProcessarMensagem:
-    def __init__(self, driver, creds, mensagem):
-        self.driver = driver
+    def __init__(self, gsm_driver, creds, mensagem):
+        # Drivers
+        self.gsm_driver = gsm_driver
+        self.gpio_driver = ControlarGpios()
+
+        # creds
         self.creds = creds
 
         # Conteudo de mensagem
@@ -43,19 +49,18 @@ class ProcessarMensagem:
 
     def interpretar_mensagem(self):
         print("Verificar mensagem recebida")
-
         # Processar pedido de estado de cartão
         if self.conteudo == "saldo":
-            saldo_atual = self.driver.saldo_cartao() # Obtem saldo do cartao
-            self.driver.enviar_msg(saldo_atual) # Envia mensagem com saldo
+            saldo_atual = self.gsm_driver.saldo_cartao() # Obtem saldo do cartao
+            self.gsm_driver.enviar_msg(saldo_atual) # Envia mensagem com saldo
 
         # Processar pedido para controlar portas
         elif "abrir" in self.conteudo:
             porta_selecionada = self.conteudo.split("#")[-1]    
             # * Codigo para acionar relé * 
-            self.driver.enviar_msg(f"Porta {porta_selecionada} aberta")
+            self.gsm_driver.enviar_msg(f"Porta {porta_selecionada} aberta")
             # * Codigo para desacionar relé 
-            self.driver.enviar_msg(f"Porta {porta_selecionada} fechada")
+            self.gsm_driver.enviar_msg(f"Porta {porta_selecionada} fechada")
 
         # Processar pedido para altearar codigo de keypad
         elif "codigo" in self.conteudo:
@@ -66,7 +71,7 @@ class ProcessarMensagem:
 
                 # * Adicionar codigo para processar creds e alterar data*
 
-                self.driver.enviar_msg(f"Codigo da porta X alterado de {codigo_antigo} para {codigo_novo}")
+                self.gsm_driver.enviar_msg(f"Codigo da porta X alterado de {codigo_antigo} para {codigo_novo}")
             except Exception as e:
                 print(e)
-                # self.driver.enviar_msg("Impossivel alterar codigo pretendido")
+                # self.gsm_driver.enviar_msg("Impossivel alterar codigo pretendido")
