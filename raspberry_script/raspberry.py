@@ -1,6 +1,5 @@
 from modules.gsm.sim900_driver import DriverSIM900
 from modules.gsm.processar_mensagem import ProcessarMensagem
-from modules.ios.control_gpios import ControlarGpios
 import json
 
 # Ler creds

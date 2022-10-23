@@ -47,6 +47,7 @@ login_manager.login_message = u'Necessário efetuar login para visualizar esta p
 from .home.routes import home
 from .admin.routes import admin
 from .devices.routes import devices
+from .logs.routes import logs
 from .api.api import api_bp
 
 # Api
@@ -56,6 +57,7 @@ api = Api(api_bp)
 app.register_blueprint(home, url_prefix = '/') # Landing page
 app.register_blueprint(admin, url_prefix = '/utilizadores') # Admin, landing
 app.register_blueprint(devices, url_prefix = '/dispositivos') # Admin, landing
+app.register_blueprint(logs, url_prefix = "/registos") # Registos de abertura de porta
 app.register_blueprint(api_bp)
 
 ############# * Models Api * #############

@@ -1,0 +1,17 @@
+<div class="content__web">
+  <table
+    class="table table-striped table-secondary table-hover table-condensed table-bordered text-center"
+  >
+    {% for log in logs.items %}
+    <tr>
+      <td title="Número do pedido">{{log.id}}</td>
+      <td title="Pedido Efetuado">{{log.utilizador}}</td>
+      <td title="Dispositivo">{{log.dispositivo}}</td>
+      <td title="Origem do Pedido">{{log.origem}}</td>
+      <td title="Timestamp">{{log.data}}</td>
+    </tr>
+    {% endfor %}
+    <!-- Paginate Controls -->
+    {% include 'logs/components/paginate-controls.html' %}
+  </table>
+</div>

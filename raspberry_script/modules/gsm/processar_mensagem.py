@@ -75,7 +75,7 @@ class ProcessarMensagem:
 
     # Alterar codigo KEYPAD
     def alterar_codigo_keypad(self, codigo_antigo, codigo_novo):
-        # * Adicionar codigo para processar creds e alterar data*
+        # * Adicionar codigo para processar creds e alterar data *
         self.gsm_driver.enviar_msg(f"Codigo da porta X alterado de {codigo_antigo} para {codigo_novo}")
 
     # Interpretar pedido de mensagme

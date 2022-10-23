@@ -8,6 +8,7 @@ api.py
 update.py
 creds.json
 creds.txt
+migrations/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
