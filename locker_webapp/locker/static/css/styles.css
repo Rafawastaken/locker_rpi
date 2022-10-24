@@ -75,6 +75,17 @@ hr {
   border: 1px solid var(--blue-hover);
 }
 
+.btn-outline-primary {
+  border: 1px solid var(--blue-btn);
+  color: var(--blue-btn);
+  outline: none;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--blue-hover);
+  border: 1px solid var(--blue-hover);
+}
+
 /*********** Navbar ***********/
 
 .nav-link-edited {
