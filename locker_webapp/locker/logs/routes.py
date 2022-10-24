@@ -37,7 +37,7 @@ def registo_atividade():
     title = "Registos de atividade"
     page = request.args.get('page', 1, type = int)
     logs = LogsAtividade.query.order_by(LogsAtividade.id.desc())
-    logs = logs.paginate(page = page, per_page = 2)
+    logs = logs.paginate(page = page, per_page = 40)
 
 
     return render_template('logs/logs.html', title = title, logs = logs)

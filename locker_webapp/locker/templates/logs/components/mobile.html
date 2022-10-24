@@ -1,0 +1,19 @@
+<div class="content__mobile">
+  <div class="row">
+    {% for log in logs.items %}
+    <div class="col-12 mb-3 w-100">
+      <div class="card" style="width: 100%">
+        <div class="card-body pb-0 text-center">
+          <h5 class="dark-blue-text">
+            {{log.utilizador.title()}} -
+            <span class="fs-6">{{log.data}}</span>
+          </h5>
+          <p class="text-muted fw-light">
+            {{log.dispositivo.upper()}} através {{log.origem.upper()}}
+          </p>
+        </div>
+      </div>
+    </div>
+    {% endfor %} {% include 'logs/components/paginate-controls.html' %}
+  </div>
+</div>

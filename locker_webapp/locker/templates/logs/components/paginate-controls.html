@@ -2,7 +2,7 @@
 <div class="text-center">
   <a
     href="{{ url_for('logs.registo_atividade', page=logs.prev_num) }}"
-    class="btn btn-outline-primary {% if logs.page == 1 %}disabled{% endif %}"
+    class="btn fs-6 btn-sm btn-outline-primary {% if logs.page == 1 %}disabled{% endif %}"
   >
     &laquo;
   </a>
@@ -15,21 +15,22 @@
   {% if logs.page == page_num %}
   <a
     href="{{ url_for('logs.registo_atividade', page=page_num) }}"
-    class="btn btn-primary"
+    class="btn fs-6 btn-sm btn-primary"
   >
     {{ page_num }}
   </a>
   {% else %}
   <a
     href="{{ url_for('logs.registo_atividade', page=page_num) }}"
-    class="btn btn-outline-primary"
+    class="btn fs-6 btn-sm btn-outline-primary fs-6"
   >
     {{ page_num }}
   </a>
-  {% endif %} {% else %} ... {% endif %} {% endfor %}
+  {% endif %} {% else %} <span class="dark-blue-text">...</span> {% endif %} {%
+  endfor %}
   <a
     href="{{ url_for('logs.registo_atividade', page=logs.next_num) }}"
-    class="btn btn-outline-primary {% if logs.page == logs.pages %}disabled{% endif %}"
+    class="btn fs-6 btn-sm btn-outline-primary {% if logs.page == logs.pages %}disabled{% endif %}"
   >
     &raquo;
   </a>
