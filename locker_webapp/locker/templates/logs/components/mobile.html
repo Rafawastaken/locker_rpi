@@ -3,13 +3,14 @@
     {% for log in logs.items %}
     <div class="col-12 mb-3 w-100">
       <div class="card" style="width: 100%">
-        <div class="card-body pb-0 text-center">
+        <div class="card-body pb-0 text-start">
           <h5 class="dark-blue-text">
             {{log.utilizador.title()}} -
-            <span class="fs-6">{{log.data}}</span>
+            <span class="fs-6">{{log.dispositivo.upper()}}</span>
           </h5>
           <p class="text-muted fw-light">
-            {{log.dispositivo.upper()}} através {{log.origem.upper()}}
+            {{log.origem.upper()}} -
+            <span class="fs-6">{{log.data}}</span>
           </p>
         </div>
       </div>
