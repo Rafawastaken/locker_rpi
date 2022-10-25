@@ -127,13 +127,22 @@ def conectar_dispositivo():
 @devices.route('/editar-dispositivo/<int:id>', methods = ['POST', 'GET'])
 @login_required
 def editar_dispositivo(id):
-    form = AdicionarDispositivoForm()
-    device = Devices.query.get_or_404(id)
     title = f"Editar Dispositivo {device.nome}"
+    form = AdicionarDispositivoForm()
+
+    # Filtrar dispositivo 
+    device = Devices.query.get_or_404(id)
+
     if form.validate_on_submit():
+        # Atribuir valores atualizados
         device.nome = form.nome.data
         device.pin = form.pin.data
+        device.codigo = form.codigo.data
+
+        # Guarda a base de dados
         db.session.commit()
+
+        # Notificar e finalizar
         flash(f"{device.nome} atualizado com sucesso!", "success")
         return redirect(url_for('devices.dispositivos'))
     return render_template('dispositivos/devices/editar-device.html', device = device,
@@ -143,12 +152,19 @@ def editar_dispositivo(id):
 @devices.route("/apagar-dispositivo/<int:id>", methods = ['POST'])
 @login_required
 def apagar_dispositivo(id):
-    disp = Devices.query.get_or_404(id)
-    if not disp:
+    # Filtrar dispositivo
+    device = Devices.query.get_or_404(id)
+
+    # Se dispositivo nao encontrado
+    if not device:
         flash("Impossível apagar o dispositivo requisitado ", "danger")
         return redirect(url_for("devices.dispositivos"))
-    db.session.delete(disp)
+
+    # Remover dispositivo da base de dados
+    db.session.delete(device)
     db.session.commit()
+    
+    # Notificar e finalizar
     flash("Dispositivo removido do servidor.","success")
     return redirect(url_for('devices.dispositivos'))
 
