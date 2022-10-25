@@ -19,16 +19,29 @@
 
       <!-- Nome -->
       <div class="row">
-        <div class="mb-3 col-6">
+        <div class="mb-3">
           <label class="dark-blue-text" for="nome">Nome</label>
           {{form.nome(placeholder="Nome do Utilizador", class="form-control
           input-color")}}
         </div>
+      </div>
 
-        <!-- Email -->
+      <div class="row">
+        <!-- Pino -->
         <div class="mb-3 col-6">
-          <label class="dark-blue-text" for="email">Pino Raspberry</label>
-          {{form.pin(placeholder="", class="form-control input-color")}}
+          <label class="dark-blue-text" for="email"
+            >Pino (GPIO) Raspberry</label
+          >
+          {{form.pin(placeholder="GPIO do Raspberry", class="form-control
+          input-color")}}
+        </div>
+        <!-- Codigo de Acesso-->
+        <div class="mb-3 col-6">
+          <label class="dark-blue-text" for="email"
+            >Código Acesso (Teclado e SMS)</label
+          >
+          {{form.codigo(placeholder="Código de Acesso - Teclado e SMS",
+          class="form-control input-color")}}
         </div>
       </div>
       <div class="row">

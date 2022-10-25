@@ -100,18 +100,26 @@ def conectar_dispositivo():
     title = "Adicionar Novo Dispositivo"
     form = AdicionarDispositivoForm()
     if form.validate_on_submit():
+        # Dados form
         nome_disp = form.nome.data
         pin_rasp = form.pin.data
+        codigo = form.codigo.data
+
+        # Filtrar dispositivos com o pino form
         device = Devices.query.filter_by(pin = pin_rasp).first()
         if device: # Verificar se algum dispositivo possui o pin a ser utilizado
             flash(f"Pino a ser utilizado por {device.nome}", "danger")
             return redirect(url_for('devices.conectar_dispositivo'))
-        device_add = Devices(nome = nome_disp, pin = pin_rasp, estado = False)
+
+        # Adicionar dispositivo a base de dados
+        device_add = Devices(nome = nome_disp, pin = pin_rasp, codigo = codigo, estado = False)
         db.session.add(device_add)
         db.session.commit()
+
+        # Notificar e finalizar
         flash(f"Dispositivo {nome_disp} no pino {pin_rasp} adicionado com sucesso", "success")
         return redirect(url_for("devices.dispositivos"))
-    else:
+    else: 
         flash_erros(form.errors.items())
     return render_template("dispositivos/devices/adicionar_device.html", title = title, form = form)
 

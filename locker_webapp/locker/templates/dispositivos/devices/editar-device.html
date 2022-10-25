@@ -5,7 +5,7 @@
   <!-- Header -->
   <section class="header">
     <div class="header__text header-blue-text">
-      <div class="display-5">Novo Dispositivo</div>
+      <div class="display-5">Editar {{device.nome.title()}}</div>
       <div class="text-muted">
         Necessário utilizar número do pino fisico -
         <a href="https://pinout.xyz" target="_blank">Ver Mais</a>
@@ -25,11 +25,22 @@
           input-color", value=device.nome)}}
         </div>
 
-        <!-- Email -->
-        <div class="mb-3 col-6">
-          <label class="dark-blue-text" for="email">Pino Raspberry</label>
-          {{form.pin(placeholder="", class="form-control input-color",
-          value=device.pin)}}
+        <!-- Pino -->
+        <div class="row">
+          <div class="mb-3 col-6">
+            <label class="dark-blue-text" for="email"
+              >Pino (GPIO) Raspberry</label
+            >
+            {{form.pin(placeholder="GPIO do Raspberry", class="form-control
+            input-color", value=device.pin)}}
+          </div>
+          <div class="mb-3 col-6">
+            <label class="dark-blue-text" for="email"
+              >Código Acesso (Teclado e SMS)</label
+            >
+            {{form.codigo(placeholder="Código Acesso (Teclado e SMS)",
+            class="form-control input-color", value=device.codigo)}}
+          </div>
         </div>
       </div>
       <div class="row">
@@ -42,7 +53,7 @@
         </div>
         <div class="col-md-6 mt-2">
           <a
-            href="{{url_for('devices.landing')}}"
+            href="{{url_for('devices.dispositivos')}}"
             class="btn btn-secondary form-control"
           >
             Voltar

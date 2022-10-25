@@ -5,6 +5,7 @@ from wtforms import validators, ValidationError
 class AdicionarDispositivoForm(FlaskForm):
     nome = StringField('Nome', [validators.Length(min = 3, max = 20), validators.DataRequired()])
     pin = IntegerField('Número do Pino', [validators.DataRequired()])
+    codigo = StringField("Código da Porta", [validators.DataRequired()])
     
 class AdicionarControladorForm(FlaskForm):
     nome = StringField('Nome', [validators.Length(min = 3, max = 20), validators.DataRequired()])
