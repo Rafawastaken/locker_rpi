@@ -60,6 +60,7 @@ def editar(id):
     if user and form.validate_on_submit():
         user.nome = form.nome.data
         user.email = form.email.data
+        user.contacto = form.contacto.data
         user.password = bcrypt.generate_password_hash(form.password.data)
         db.session.commit()
 

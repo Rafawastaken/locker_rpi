@@ -17,33 +17,43 @@
       <div class="mb-3">
         <label class="dark-blue-text" for="nome">Nome</label>
         {{form.nome(placeholder="Nome do Utilizador", value = user.nome,
-        class="form-control", )}}
+        class="form-control input-color", )}}
       </div>
 
       <!-- Email -->
       <div class="mb-3">
         <label class="dark-blue-text" for="email">Endereço Email</label>
-        {{form.email(class="form-control", value = user.email,
+        {{form.email(class="form-control input-color", value = user.email,
         placeholder="Endereço Email")}}
+      </div>
+
+      <!-- Contacto -->
+      <div class="mb-3">
+        <label for="contacto" class="dark-blue-text"
+          >Contacto <span class="text-muted fs-6">(+351XXXXXXXXX)</span></label
+        >
+        {{form.contacto(class="form-control input-color", value = user.contacto,
+        placeholder="Contacto teléfonico")}}
       </div>
 
       <!-- Password -->
       <div class="mb-3">
         <label class="dark-blue-text" for="password">Password</label>
-        {{form.password(class="form-control", placeholder="Password")}}
+        {{form.password(class="form-control input-color",
+        placeholder="Password")}}
       </div>
 
       <!-- Repetir Password -->
       <div class="mb-3">
         <label class="dark-blue-text" for="password_2">Repetir Password</label>
-        {{form.password_2(placeholder="Repetir Password",
-        class="form-control")}}
+        {{form.password_2(placeholder="Repetir Password", class="form-control
+        input-color")}}
       </div>
 
       <div class="form__controls">
         <input
           type="submit"
-          class="btn btn-primary form-control"
+          class="btn btn-primary form-control input-color"
           value="Atualizar"
         />
 
