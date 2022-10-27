@@ -67,14 +67,20 @@
         </li>
         <!-- Fim Dropdown -->
       </ul>
-      <form class="d-flex" role="search">
-        <a
-          href="{{url_for('admin.logout')}}"
-          title="Terminar Sessão"
-          class="nav-link btn btn-primary text-light px-3 m-2"
-          ><i class="bi bi-box-arrow-right"></i
-        ></a>
-      </form>
+      <!-- Atualizar creds -->
+      <a
+        href=""
+        title="Atualizar Creds"
+        class="nav-link btn btn-outline-primary text-light px-3 m-2"
+        ><i class="bi bi-arrow-clockwise"></i
+      ></a>
+      <!-- Logout -->
+      <a
+        href="{{url_for('admin.logout')}}"
+        title="Terminar Sessão"
+        class="nav-link btn btn-outline-secondary text-light px-3 m-2"
+        ><i class="bi bi-box-arrow-right"></i
+      ></a>
       {% endif %}
     </div>
   </div>

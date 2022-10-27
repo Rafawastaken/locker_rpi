@@ -20,4 +20,8 @@ class Controladores(db.Model):
     nome = db.Column(db.String(50), nullable = False, unique = True)
     key = db.Column(db.String(180), nullable = False, unique = False)
 
+class Atualizar(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    atualizar = db.Column(db.Integer, nullable = False, unique = False)
+
 db.create_all()
