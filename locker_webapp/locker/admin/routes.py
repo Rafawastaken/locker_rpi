@@ -38,6 +38,7 @@ def registar():
         novo_user = User(
             nome = form.nome.data,
             email = form.email.data,
+            contacto = form.contacto.data,
             password = hash_password
         )
         db.session.add(novo_user)

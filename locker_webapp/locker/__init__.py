@@ -1,3 +1,4 @@
+from ast import Add
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy # Base de Dados
 from flask_migrate import Migrate # Migrações
@@ -61,8 +62,9 @@ app.register_blueprint(logs, url_prefix = "/registos") # Registos de abertura de
 app.register_blueprint(api_bp)
 
 ############# * Models Api * #############
-from .api.api import GetDeviceStatus, PatchDeviceStatus
+from .api.api import GetDeviceStatus, PatchDeviceStatus, AddLog
 
 ############# * API Endpoints * #############
 api.add_resource(GetDeviceStatus, "/devices_status")
 api.add_resource(PatchDeviceStatus, "/device_patch/<int:device_pin>")
+api.add_resource(AddLog, "/registos/adicionar")
