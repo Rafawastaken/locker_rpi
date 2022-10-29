@@ -19,38 +19,42 @@ from modules.ios.control_gpios import ControlarGpios
 from time import sleep
 
 class ProcessarMensagem:
-    def __init__(self, gsm_driver, creds, mensagem):
+    def __init__(self, gsm_driver, utilizadores_registados:list, mensagem):
         # Drivers
         self.gsm_driver = gsm_driver
-        self.gpio_driver = ControlarGpios()
 
-        # creds
-        self.creds = creds
+        # utilizadores registados
+        self.utilizadores_registados = utilizadores_registados
+        self.lista_contactos_autorizados = []
+        for utilizador in self.utilizadores_registados:
+            self.lista_contactos_autorizados.append(utilizador.get('contacto'))
 
         # Conteudo de mensagem
         self.remetente = mensagem.get("remetente")
+        self.destinatario = mensagem.get("destinatario")
         self.data = mensagem.get("data")
         self.hora = mensagem.get("hora")
         self.conteudo = mensagem.get("conteudo")
 
         # Limpar strings
-        self.remetente = self.remetente.replace(" ", "")[:-1]
-        self.creds = self.creds.replace(" ", "")[:-1]
-        self.conteudo = self.conteudo.replace(" ", "")[:-1] .lower()      
-        
-        if self.verificar_remetente():
-            self.interpretar_mensagem()
+        self.remetente = self.remetente.replace(" ", "")
+        self.conteudo = self.conteudo.replace(" ", "")[:-1] .lower()
 
+    # Verificar se remente esta presente na lista de utilizadores registados
     def verificar_remetente(self):
-        if self.remetente != self.creds:
+        if self.remetente not in self.lista_contactos_autorizados:
             print("Numero de rementente nao reconhecido, ignorar")
             return False
         print("Numero de remetente reconhecido")
         return True
 
     # Enviar mensagme com saldo do cartao
-    def comunicar_saldo(self, saldo_atual):
-        self.gsm_driver.enviar_msg(saldo_atual) # Envia mensagem com saldo
+    def comunicar_saldo(self):
+        if self.verificar_remetente():
+            print("Verificar saldo de cartao")
+            saldo_atual = self.gsm_driver.saldo_cartao() # Obtem saldo do cartao
+            self.gsm_driver.enviar_msg(saldo_atual) # Envia mensagem com saldo
+            return f"Saldo: {saldo_atual} -> Mensagem enviada com sucesso."
 
     # Abrir e Fechar porta por SMS 
     def controlar_porta_gsm(self, porta_selecionada):
@@ -81,10 +85,10 @@ class ProcessarMensagem:
     # Interpretar pedido de mensagme
     def interpretar_mensagem(self):
         print("Verificar mensagem recebida")
+
         # Processar pedido de estado de cartão
         if self.conteudo == "saldo":
-            saldo_atual = self.gsm_driver.saldo_cartao() # Obtem saldo do cartao
-            self.comunicar_saldo(saldo_atual)
+            self.comunicar_saldo()
 
         # Processar pedido para controlar portas
         elif "abrir" in self.conteudo:

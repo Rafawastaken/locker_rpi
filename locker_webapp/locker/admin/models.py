@@ -12,7 +12,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(50),unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    contacto = db.Column(db.String(13), unique=True, nullable=True, default="s/ contacto")
+    contacto = db.Column(db.String(15), unique=True, nullable=True, default="s/ contacto")
     password = db.Column(db.String(180),unique=False, nullable=False)
     
     def __repr__(self):

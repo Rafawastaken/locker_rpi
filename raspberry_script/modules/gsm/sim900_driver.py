@@ -15,11 +15,10 @@ import sys
 # Driver para SIM900
 class DriverSIM900:
     # port -> porta serial utilizada
-    def __init__(self, port, destinatario, baudrate = 9600, timeout = 1):
+    def __init__(self, port, baudrate = 9600, timeout = 1):
         self.port = port
         self.baudrate = baudrate
         self.timeout = timeout
-        self.destinatario = destinatario
         self.max_recursions = 0
 
         # GSM Serial Driver
@@ -51,7 +50,6 @@ class DriverSIM900:
         attempts = 0
 
         while 'EUR' not in self.resp:
-            print(attempts)
             if attempts >= 3: 
                 # 10 Tentativas por recursion
                 print(f"Impossivel de obter saldo a tentar novamente - {self.max_recursions}")
@@ -61,6 +59,7 @@ class DriverSIM900:
                 if attempts >= 5:
                     return "Impossivel de obter saldo tente novamente mais tarde"
     
+                #  Recursion para pobter saldoç
                 self.saldo_cartao()
 
             self.resp = self.gsm.read(1000).decode()
@@ -93,7 +92,9 @@ class DriverSIM900:
                     self.header = self.msg_raw[1].replace('"', '').split(",")
 
                     # String manip. para isolar remetente e data
-                    self.rementente = self.header[0].split(":")[1].replace(" ", "")
+                    self.rementente = self.header[0].split(":")[1].replace(" ", "") # Quem enviou mensagem
+                    self.destinatario = self.rementente # Destinatario da mensagem mesmo que remetente
+
                     self.data = self.header[2]
                     self.hora = self.header[3].split("+")[0]
 
@@ -103,6 +104,7 @@ class DriverSIM900:
                     # Return
                     self.msg_clean = {
                         "remetente":self.rementente,
+                        "destinatario":self.destinatario,
                         "data":self.data,
                         "hora":self.hora,
                         "conteudo":self.content
