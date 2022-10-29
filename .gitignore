@@ -9,6 +9,7 @@ update.py
 creds.json
 creds.txt
 migrations/
+get_creds_test.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

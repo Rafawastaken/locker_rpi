@@ -1,11 +1,17 @@
+from enum import unique
 from locker import db
 
 """
-    Modelo para armazenar as configurações dos Relés
-        id - ID de device
-        nome - Nome do device
-        pin - Pin number ao qual device esta ligado
-        estado - Ligado ou Desligado
+    DEVICES: Modelo responsavel por armazenar o estado dos GPIOs
+        - Nome: Nome do dispositivo;
+        - Pin: Número do GPIO
+        - Codigo: Código da porta + gsm
+        - Estado: True, False -> Ligado, Desligado
+    ---
+    Controladores: Modelo responsavel por armazenar informacao usada na API
+        - Nome: Nome do controlador
+        - Access_name: Nome a ser validado
+        - key: Código de acesso
 """
 
 class Devices(db.Model):
@@ -18,6 +24,7 @@ class Devices(db.Model):
 class Controladores(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     nome = db.Column(db.String(50), nullable = False, unique = True)
+    access_name = db.Column(db.String(20), nullable = False, unique = True)
     key = db.Column(db.String(180), nullable = False, unique = False)
 
 class Atualizar(db.Model):

@@ -36,11 +36,13 @@ def adicionar_controlador():
     title = "Adicionar Controlador"
     form = AdicionarControladorForm()
     if form.validate_on_submit():
+        # Match data 
         nome = form.nome.data
         codigo =  bcrypt.generate_password_hash(form.access_code.data)
+        access_name = form.access_name.data
        
         # Adicionar novo controlador
-        novo_controlador = Controladores(nome = nome, key = codigo)
+        novo_controlador = Controladores(nome = nome, key = codigo, access_name = access_name)
         db.session.add(novo_controlador)
         db.session.commit()
 
@@ -60,6 +62,7 @@ def editar_controlador(id):
     form = AdicionarControladorForm()
     if form.validate_on_submit():
         controlador.nome = form.nome.data
+        controlador.access_name = form.access_name.data
         controlador.key = bcrypt.generate_password_hash(form.access_code.data)
         db.session.commit()
         flash(f"Controlador {form.nome.data} editar com sucesso!", "success")

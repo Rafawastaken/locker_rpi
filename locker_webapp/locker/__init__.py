@@ -59,12 +59,13 @@ app.register_blueprint(home, url_prefix = '/') # Landing page
 app.register_blueprint(admin, url_prefix = '/utilizadores') # Admin, landing
 app.register_blueprint(devices, url_prefix = '/dispositivos') # Admin, landing
 app.register_blueprint(logs, url_prefix = "/registos") # Registos de abertura de porta
-app.register_blueprint(api_bp)
+app.register_blueprint(api_bp) # Api blueprint
 
 ############# * Models Api * #############
-from .api.api import GetDeviceStatus, PatchDeviceStatus, AddLog
+from .api.api import GetDeviceStatus, PatchDeviceStatus, AddLog, GetCreds
 
 ############# * API Endpoints * #############
-api.add_resource(GetDeviceStatus, "/devices_status")
-api.add_resource(PatchDeviceStatus, "/device_patch/<int:device_pin>")
-api.add_resource(AddLog, "/registos/adicionar")
+api.add_resource(GetDeviceStatus, "/devices_status") # Estadp de dispositivos
+api.add_resource(PatchDeviceStatus, "/device_patch/<int:device_pin>") # Alterar estado de dispositivo
+api.add_resource(AddLog, "/registos/adicionar") # Adicionar logs
+api.add_resource(GetCreds, "/get_creds") # Get creds
