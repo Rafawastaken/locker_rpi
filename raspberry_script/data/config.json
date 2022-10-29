@@ -1,0 +1,7 @@
+{
+  "users": [{ "nome": "Rafael Pimenta", "contacto": "+351960197688" }],
+  "dispositivos": [
+    { "nome": "Porta 1", "codigo": "1111" },
+    { "nome": "Porta 2", "codigo": "2222" }
+  ]
+}
