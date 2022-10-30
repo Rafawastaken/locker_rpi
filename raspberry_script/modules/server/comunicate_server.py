@@ -11,7 +11,7 @@ class ComunicarServidor:
         # Utilizado para HTTP Auth
         self.auth = (self.username, self.password) 
 
-    ### * Enviar Get Request
+    # Enviar Get Request
     def get_status(self):
         endpoint = f"{self.link}/devices_status"
 
@@ -20,7 +20,7 @@ class ComunicarServidor:
         if r.status_code == 200: return r.json()
         return "Erro a enviar pedido"
 
-    ### * Enviar patch request para alterar servidor
+    # Enviar patch request para alterar servidor
     def patch_status(self, value, target):
         endpoint = f"{self.link}/device_patch/{target}"
 
@@ -31,3 +31,7 @@ class ComunicarServidor:
         
         if r.status_code == 200: return r.json()
         return "Erro ao enviar pedido..."
+
+    # Adicionar log
+    def adicionar_log():
+        pass

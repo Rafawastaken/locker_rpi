@@ -46,8 +46,9 @@ def main():
     while True:
         mensagem = gsm_driver.receber_msg()
         if mensagem:
-            processar_mensagem = ProcessarMensagem(gsm_driver, utilizadores_autorizados, mensagem) 
+            processar_mensagem = ProcessarMensagem(gsm_driver, utilizadores_autorizados, dispositivos_registados, mensagem) 
             processar_mensagem.interpretar_mensagem()
+            print("-" * 30)
             
 if __name__ == '__main__':
     main()

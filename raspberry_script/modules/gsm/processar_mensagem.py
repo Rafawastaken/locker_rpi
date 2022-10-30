@@ -5,7 +5,7 @@
         - SALDO
             -> Responde com mensagen saldo atual
 
-        - ABRIR -> abrir#1
+        - ABRIR -> abrir#nome porta#codigo
             -> Abrir porta X
             -> Responde com "porta aberta"
             -> Responde com "porta fechada"
@@ -19,8 +19,9 @@ from modules.ios.control_gpios import ControlarGpios
 from time import sleep
 
 class ProcessarMensagem:
-    def __init__(self, gsm_driver, utilizadores_registados:list, mensagem):
+    def __init__(self, gsm_driver, utilizadores_registados:list, dispositivos:list, mensagem):
         # Drivers
+        self.gpio_driver = ControlarGpios()
         self.gsm_driver = gsm_driver
 
         # utilizadores registados
@@ -28,6 +29,9 @@ class ProcessarMensagem:
         self.lista_contactos_autorizados = []
         for utilizador in self.utilizadores_registados:
             self.lista_contactos_autorizados.append(utilizador.get('contacto'))
+
+        # dispositivos registados
+        self.dispositivos_registados = dispositivos
 
         # Conteudo de mensagem
         self.remetente = mensagem.get("remetente")
@@ -48,6 +52,7 @@ class ProcessarMensagem:
         print("Numero de remetente reconhecido")
         return True
 
+
     # Enviar mensagme com saldo do cartao
     def comunicar_saldo(self):
         if self.verificar_remetente():
@@ -56,31 +61,43 @@ class ProcessarMensagem:
             self.gsm_driver.enviar_msg(saldo_atual) # Envia mensagem com saldo
             return f"Saldo: {saldo_atual} -> Mensagem enviada com sucesso."
 
-    # Abrir e Fechar porta por SMS 
-    def controlar_porta_gsm(self, porta_selecionada):
-        # Abrir porta
-        porta_aberta = self.gpio_driver.abrir_porta(porta_selecionada)
-        
-        if porta_aberta:
-            self.gsm_driver.enviar_msg(f"Porta {porta_selecionada} aberta")
-        else:
-            print(f"Ocorreu erro ao abrir a porta: {porta_selecionada}")
-            return False
-        
-        # Delay para manter porta aberta
-        sleep(10) 
 
-        # Fechar porta
-        porta_fechada = self.gpio_driver.fechar_porta(porta_selecionada)
-        if porta_fechada:
-            self.gsm_driver.enviar_msg(f"Porta {porta_selecionada} fechada")
-        else:
-            print(f"Ocorreu erro ao abrir a porta: {porta_selecionada}")
+    # Abrir e Fechar porta por SMS 
+    def controlar_porta_gsm(self):      
+        self.conteudo = self.conteudo.split("#")
+        nome_request = self.conteudo[1].lower().replace(" ", "")
+        codigo_request = str(self.conteudo[2]).replace(" ", "")
+        
+        for device in self.dispositivos_registados:
+            nome_device = device.get('nome').lower().replace(" ", "")
+            codigo_device = device.get('codigo')
+
+            # validar codigo
+            if nome_device == nome_request and codigo_device == codigo_request:                
+                # -> Abrir porta
+
+                # -> Enviar SMS - Porta aberta
+                self.gsm_driver.enviar_msg(f"{device.get('nome').title()} aberta")
+                # -> Enviar LOG
+                
+                # -> DELAY
+                sleep(10)
+
+                # -> Fechar porta
+
+                # -> Enviar SMS - Porta fechada
+                self.gsm_driver.enviar_msg(f"{device.get('nome').title()} fechada")
+
+                # -> Enviar LOG
+
 
     # Alterar codigo KEYPAD
     def alterar_codigo_keypad(self, codigo_antigo, codigo_novo):
-        # * Adicionar codigo para processar creds e alterar data *
-        self.gsm_driver.enviar_msg(f"Codigo da porta X alterado de {codigo_antigo} para {codigo_novo}")
+        # Verificar se utilizador se encontra registado
+        if self.verificar_remetente():
+            # * Adicionar codigo para processar creds e alterar data *
+            self.gsm_driver.enviar_msg(f"Codigo da porta X alterado de {codigo_antigo} para {codigo_novo}")
+
 
     # Interpretar pedido de mensagme
     def interpretar_mensagem(self):
@@ -92,8 +109,7 @@ class ProcessarMensagem:
 
         # Processar pedido para controlar portas
         elif "abrir" in self.conteudo:
-            porta_selecionada = int(self.conteudo.split("#")[-1])
-            self.controlar_porta_gsm(porta_selecionada)
+            self.controlar_porta_gsm()
             
         # Processar pedido para altearar codigo de keypad
         elif "codigo" in self.conteudo:

@@ -44,7 +44,7 @@ class DriverSIM900:
 
     # Funcao para receber o saldo atual do cartão
     def saldo_cartao(self):
-        print("Verificar saldo do cartão")
+        print("Verificar saldo do cartão", end = "\r")
         self.resp = self.gsm.read(1000).decode()
         self.gsm.write('AT+CUSD=1,"*111#",15\r'.encode())
         attempts = 0
@@ -52,7 +52,7 @@ class DriverSIM900:
         while 'EUR' not in self.resp:
             if attempts >= 3: 
                 # 10 Tentativas por recursion
-                print(f"Impossivel de obter saldo a tentar novamente - {self.max_recursions}")
+                print(f"Aguardar saldo - {self.max_recursions}", end = '\r')
                 
                 # Maximo de 3 recursions permitidas
                 self.max_recursions = self.max_recursions + 1
@@ -112,8 +112,11 @@ class DriverSIM900:
 
                     return self.msg_clean
 
-                except Exception as e:
-                    print(e)
+                except IndexError:
+                    continue
 
                 except KeyboardInterrupt:
-                    sys.exit(1) # break while True
+                    sys.exit(1) 
+
+                except Exception as e:
+                    print(e)
