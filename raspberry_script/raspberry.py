@@ -2,6 +2,7 @@
 from modules.gsm.sim900_driver import DriverSIM900
 from modules.gsm.processar_mensagem import ProcessarMensagem
 from modules.server.atualizar_config import AtualizarConfig
+from modules.server.comunicate_server import ComunicarServidor
 
 # Generalistas
 import json
@@ -35,18 +36,18 @@ def main():
         config = json.loads(conf.read())
 
     # Atribuir valores
-    utilizadores_autorizados = config.get('users')
-    dispositivos_registados = config.get('dispositivos')
+    users_autorizados = config.get('users')
+    disp_registados = config.get('dispositivos')
 
     # Criar Driver para GSM 
     gsm_driver = DriverSIM900("COM3")
-
+    server_com_driver = ComunicarServidor(access_name, access_key)
 
     # Ciclo principal
     while True:
         mensagem = gsm_driver.receber_msg()
         if mensagem:
-            processar_mensagem = ProcessarMensagem(gsm_driver, utilizadores_autorizados, dispositivos_registados, mensagem) 
+            processar_mensagem = ProcessarMensagem(gsm_driver, users_autorizados, disp_registados, mensagem, server_com_driver) 
             processar_mensagem.interpretar_mensagem()
             print("-" * 30)
             

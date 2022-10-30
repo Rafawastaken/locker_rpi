@@ -14,15 +14,17 @@
             -> Altera codigo atual para novo codigo 
             -> Responde com codigo alterdo com sucesso
 """
+
 # Controlar GPIOS 
 from modules.ios.control_gpios import ControlarGpios
 from time import sleep
 
 class ProcessarMensagem:
-    def __init__(self, gsm_driver, utilizadores_registados:list, dispositivos:list, mensagem):
+    def __init__(self, gsm_driver, utilizadores_registados:list, dispositivos:list, mensagem, server_com_driver):
         # Drivers
         self.gpio_driver = ControlarGpios()
         self.gsm_driver = gsm_driver
+        self.server_com_driver = server_com_driver
 
         # utilizadores registados
         self.utilizadores_registados = utilizadores_registados
@@ -73,22 +75,27 @@ class ProcessarMensagem:
             codigo_device = device.get('codigo')
 
             # validar codigo
-            if nome_device == nome_request and codigo_device == codigo_request:                
+            if nome_device == nome_request and codigo_device == codigo_request:    
+                endpoint = "http://127.0.0.1:5000/registos/adiciona"
+
                 # -> Abrir porta
 
                 # -> Enviar SMS - Porta aberta
                 self.gsm_driver.enviar_msg(f"{device.get('nome').title()} aberta")
+
                 # -> Enviar LOG
+                self.server_com_driver.adicionar_log(self.remetente, device.get("nome").title(), "GSM", endpoint)
                 
                 # -> DELAY
                 sleep(10)
 
                 # -> Fechar porta
 
-                # -> Enviar SMS - Porta fechada
+                # Enviar SMS - Porta fechada
                 self.gsm_driver.enviar_msg(f"{device.get('nome').title()} fechada")
 
-                # -> Enviar LOG
+                # Enviar LOG
+                self.server_com_driver.adicionar_log(self.remetente, device.get("nome").title(), "GSM", endpoint)
 
 
     # Alterar codigo KEYPAD
