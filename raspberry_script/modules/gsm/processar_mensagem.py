@@ -76,7 +76,7 @@ class ProcessarMensagem:
 
             # validar codigo
             if nome_device == nome_request and codigo_device == codigo_request:    
-                endpoint = "http://127.0.0.1:5000/registos/adiciona"
+                endpoint = "http://127.0.0.1:5000/registos/adicionar"
 
                 # -> Abrir porta
 
