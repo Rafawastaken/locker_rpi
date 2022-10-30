@@ -130,11 +130,12 @@ def conectar_dispositivo():
 @devices.route('/editar-dispositivo/<int:id>', methods = ['POST', 'GET'])
 @login_required
 def editar_dispositivo(id):
+    # Filtrar dispositivo 
+    device = Devices.query.get_or_404(id)
+    
     title = f"Editar Dispositivo {device.nome}"
     form = AdicionarDispositivoForm()
 
-    # Filtrar dispositivo 
-    device = Devices.query.get_or_404(id)
 
     if form.validate_on_submit():
         # Atribuir valores atualizados

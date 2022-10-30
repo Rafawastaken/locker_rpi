@@ -1,5 +1,5 @@
 from flask import Blueprint, flash, render_template, redirect, url_for, request
-from flask_login import current_user
+from flask_login import current_user, login_required
 from .models import LogsAtividade
 from locker import app, db
 
@@ -33,16 +33,11 @@ def adicionar_atividade_sample():
 
 # Visualizar registo de atividade
 @logs.route('/registos-atividadead')
+@login_required
 def registo_atividade():
     title = "Registos de atividade"
     page = request.args.get('page', 1, type = int)
     logs = LogsAtividade.query.order_by(LogsAtividade.id.desc())
     logs = logs.paginate(page = page, per_page = 40)
 
-
     return render_template('logs/logs.html', title = title, logs = logs)
-
-@logs.route('/adicionar-log')
-def adicionar():
-    adicionar_atividade_sample()
-    return "adicionados"

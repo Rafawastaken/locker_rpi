@@ -6,18 +6,8 @@
 from time import sleep
 
 class ControlarGpios:
-    def abrir_porta(self, port:int):
-        try:
-            print(f"Porta: {port} -> Aberta")
-            return True
-        except Exception as e:
-            print(e)
-            return False
-
-    def fechar_porta(self, port:int):
-        try:
-            print(f"Porta: {port} -> Fechada")
-            return True
-        except Exception as e:
-            print(e)
-            return False
+    def controlar_pin(self, pino:int, estado:bool):
+        if estado:
+            print(f"Porta aberta {pino}")
+        if not estado:
+            print(f"Porta fechada {pino}")

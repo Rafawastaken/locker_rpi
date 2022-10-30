@@ -46,6 +46,7 @@ class ProcessarMensagem:
         self.remetente = self.remetente.replace(" ", "")
         self.conteudo = self.conteudo.replace(" ", "")[:-1] .lower()
 
+
     # Verificar se remente esta presente na lista de utilizadores registados
     def verificar_remetente(self):
         if self.remetente not in self.lista_contactos_autorizados:
@@ -54,7 +55,7 @@ class ProcessarMensagem:
         print("Numero de remetente reconhecido")
         return True
 
-
+    
     # Enviar mensagme com saldo do cartao
     def comunicar_saldo(self):
         if self.verificar_remetente():
