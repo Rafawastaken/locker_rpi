@@ -28,7 +28,8 @@ def main():
 
     # Verificar if config.json existe
     if not os.path.exists('./data./config.json'):
-        endpoint = "http://127.0.0.1:5000/get_creds"
+        print("Descarregar config")
+        endpoint = "http://127.0.0.1:5000/config"
         atualizar_creds(access_name, access_key, endpoint)
     
     # Carregar config.json

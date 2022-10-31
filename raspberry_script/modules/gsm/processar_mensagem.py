@@ -68,22 +68,25 @@ class ProcessarMensagem:
     # Abrir e Fechar porta por SMS 
     def controlar_porta_gsm(self):      
         self.conteudo = self.conteudo.split("#")
-        nome_request = self.conteudo[1].lower().replace(" ", "")
+        device_id_request = self.conteudo[1].lower().replace(" ", "")
         codigo_request = str(self.conteudo[2]).replace(" ", "")
         
         for device in self.dispositivos_registados:
-            nome_device = device.get('nome').lower().replace(" ", "")
+            nome_device = device.get('nome')
+            id_device = device.get('id').lower()
             codigo_device = device.get('codigo')
+            pino_device = device.get('gpio')
 
             # validar codigo
-            if nome_device == nome_request and codigo_device == codigo_request:    
+            if id_device == device_id_request and codigo_device == codigo_request:    
                 endpoint = "http://127.0.0.1:5000/registos/adicionar"
 
-                # -> Abrir porta
+                # Encontrar dispositivo   
 
+                # -> Abrir porta
+                self.gpio_driver.ligar(pino_device)
                 # -> Enviar SMS - Porta aberta
                 self.gsm_driver.enviar_msg(f"{device.get('nome').title()} aberta")
-
                 # -> Enviar LOG
                 self.server_com_driver.adicionar_log(self.remetente, device.get("nome").title(), "GSM", endpoint)
                 
@@ -91,13 +94,15 @@ class ProcessarMensagem:
                 sleep(10)
 
                 # -> Fechar porta
-
+                self.gpio_driver.desligar(pino_device)
                 # Enviar SMS - Porta fechada
                 self.gsm_driver.enviar_msg(f"{device.get('nome').title()} fechada")
-
                 # Enviar LOG
                 self.server_com_driver.adicionar_log(self.remetente, device.get("nome").title(), "GSM", endpoint)
+                return True
 
+            print("ID de porta ou codigo de acesso errado")
+            return False
 
     # Alterar codigo KEYPAD
     def alterar_codigo_keypad(self, codigo_antigo, codigo_novo):

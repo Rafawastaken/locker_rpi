@@ -68,4 +68,4 @@ from .api.api import GetDeviceStatus, PatchDeviceStatus, AddLog, GetCreds
 api.add_resource(GetDeviceStatus, "/devices_status") # Estadp de dispositivos
 api.add_resource(PatchDeviceStatus, "/device_patch/<int:device_pin>") # Alterar estado de dispositivo
 api.add_resource(AddLog, "/registos/adicionar") # Adicionar logs
-api.add_resource(GetCreds, "/get_creds") # Get creds
+api.add_resource(GetCreds, "/config") # Get config

@@ -23,7 +23,7 @@ class ComunicarServidor:
         print("Publicar log no servidor")        
 
         # Enviar put request para API
-        r = requests.put(endpoint, auth = self.auth, json = data, verify=False)
+        r = requests.put(endpoint, auth = self.auth, json = data, verify = False)
         print(r.status_code)
         if r.status_code == 200:
             return "Log adicionado com sucesso!"

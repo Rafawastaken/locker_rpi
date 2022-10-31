@@ -6,8 +6,8 @@
 from time import sleep
 
 class ControlarGpios:
-    def controlar_pin(self, pino:int, estado:bool):
-        if estado:
-            print(f"Porta aberta {pino}")
-        if not estado:
-            print(f"Porta fechada {pino}")
+    def ligar(self, pino:int):
+        print("LIGAOD", str(pino))
+
+    def desligar(self, pino):
+        print("DESLIGADO", str(pino))

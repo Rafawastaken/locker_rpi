@@ -1,7 +1,1 @@
-{
-  "users": [{ "nome": "Rafael Pimenta", "contacto": "+351960197688" }],
-  "dispositivos": [
-    { "nome": "Porta 1", "codigo": "1111" },
-    { "nome": "Porta 2", "codigo": "2222" }
-  ]
-}
+{"users": [{"nome": "Rafael Pimenta", "contacto": "+351960197688"}], "dispositivos": [{"nome": "Porta 1", "id": "porta1", "codigo": "1111", "pino": 22}]}
