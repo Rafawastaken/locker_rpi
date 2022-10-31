@@ -19,9 +19,14 @@
 
       <!-- Nome -->
       <div class="row">
-        <div class="mb-3">
+        <div class="mb-3 col-6">
           <label class="dark-blue-text" for="nome">Nome</label>
           {{form.nome(placeholder="Nome do Utilizador", class="form-control
+          input-color")}}
+        </div>
+        <div class="mb-3 col-6">
+          <label class="dark-blue-text" for="nome">ID Dispositivo</label>
+          {{form.device_id(placeholder="ID de dispositivo", class="form-control
           input-color")}}
         </div>
       </div>

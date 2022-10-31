@@ -105,17 +105,22 @@ def conectar_dispositivo():
     if form.validate_on_submit():
         # Dados form
         nome_disp = form.nome.data
+        device_id = form.device_id.data
         pin_rasp = form.pin.data
         codigo = form.codigo.data
 
-        # Filtrar dispositivos com o pino form
-        device = Devices.query.filter_by(pin = pin_rasp).first()
-        if device: # Verificar se algum dispositivo possui o pin a ser utilizado
-            flash(f"Pino a ser utilizado por {device.nome}", "danger")
+        # Verificar se algum dispositivo possui o pin a ser utilizado
+        if Devices.query.filter_by(pin = pin_rasp).first(): 
+            flash(f"Pino a ser utilizado", "danger")
             return redirect(url_for('devices.conectar_dispositivo'))
 
+        # Verificar se algum dispositivo possui o id a ser utilizado
+        if Devices.query.filter_by(device_id =  device_id).first():
+            flash(f"ID de dispositivo a ser utilizado", "danger")
+            return redirect(url_for('devices.consectar_dispositivo'))
+
         # Adicionar dispositivo a base de dados
-        device_add = Devices(nome = nome_disp, pin = pin_rasp, codigo = codigo, estado = False)
+        device_add = Devices(nome = nome_disp, device_id = device_id, pin = pin_rasp, codigo = codigo, estado = False)
         db.session.add(device_add)
         db.session.commit()
 
@@ -142,6 +147,7 @@ def editar_dispositivo(id):
         device.nome = form.nome.data
         device.pin = form.pin.data
         device.codigo = form.codigo.data
+        device.device_id = form.device_id.data
 
         # Guarda a base de dados
         db.session.commit()

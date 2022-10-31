@@ -24,25 +24,31 @@
           {{form.nome(placeholder="Nome do Utilizador", class="form-control
           input-color", value=device.nome)}}
         </div>
-
-        <!-- Pino -->
-        <div class="row">
-          <div class="mb-3 col-6">
-            <label class="dark-blue-text" for="email"
-              >Pino (GPIO) Raspberry</label
-            >
-            {{form.pin(placeholder="GPIO do Raspberry", class="form-control
-            input-color", value=device.pin)}}
-          </div>
-          <div class="mb-3 col-6">
-            <label class="dark-blue-text" for="email"
-              >Código Acesso (Teclado e SMS)</label
-            >
-            {{form.codigo(placeholder="Código Acesso (Teclado e SMS)",
-            class="form-control input-color", value=device.codigo)}}
-          </div>
+        <div class="mb-3 col-6">
+          <label class="dark-blue-text" for="nome">ID Dispositivo</label>
+          {{form.device_id(placeholder="ID de dispositivo", class="form-control
+          input-color", value=device.device_id)}}
         </div>
       </div>
+
+      <!-- Pino -->
+      <div class="row">
+        <div class="mb-3 col-6">
+          <label class="dark-blue-text" for="email"
+            >Pino (GPIO) Raspberry</label
+          >
+          {{form.pin(placeholder="GPIO do Raspberry", class="form-control
+          input-color", value=device.pin)}}
+        </div>
+        <div class="mb-3 col-6">
+          <label class="dark-blue-text" for="email"
+            >Código Acesso (Teclado e SMS)</label
+          >
+          {{form.codigo(placeholder="Código Acesso (Teclado e SMS)",
+          class="form-control input-color", value=device.codigo)}}
+        </div>
+      </div>
+
       <div class="row">
         <div class="col-md-6 mt-2">
           <input

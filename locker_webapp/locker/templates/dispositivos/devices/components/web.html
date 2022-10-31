@@ -5,7 +5,8 @@
     {% for device in devices %}
     <tr>
       <td title="Nome do dispositivo">{{device.nome.title()}}</td>
-      <td title="Pino de conexão">{{device.pin}}</td>
+      <td title="Código de dispositivo">{{device.codigo}}</td>
+      <td title="Pin do dispositivo">{{device.pin}}</td>
       <td>
         {% if device.estado %}
         <form

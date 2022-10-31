@@ -17,6 +17,7 @@ from locker import db
 class Devices(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     nome = db.Column(db.String(50),unique = True, nullable = False)
+    device_id = db.Column(db.String(10), unique = True, nullable = False)
     pin = db.Column(db.Integer, unique = True, nullable = False)
     codigo = db.Column(db.String(10), unique = True, nullable = False)
     estado = db.Column(db.Boolean, nullable = False)
