@@ -75,11 +75,11 @@ class ProcessarMensagem:
             nome_device = device.get('nome')
             id_device = device.get('id').lower()
             codigo_device = device.get('codigo')
-            pino_device = device.get('gpio')
+            pino_device = device.get('pino')
 
             # validar codigo
             if id_device == device_id_request and codigo_device == codigo_request:    
-                endpoint = "http://127.0.0.1:5000/registos/adicionar"
+                endpoint = "http://192.168.1.65:5000/config/registos/adicionar"
 
                 # Encontrar dispositivo   
 
