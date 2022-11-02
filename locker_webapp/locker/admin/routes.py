@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request, session
+from .models import User
 from flask_login import login_required, current_user, logout_user, login_user
 from locker import app, db, bcrypt
 from .forms import RegisterUser, EditarUser, LoginUser
-from .models import User
 
 admin = Blueprint('admin', __name__)
 

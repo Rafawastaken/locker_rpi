@@ -18,54 +18,56 @@ DATABASE_PATH = f"{BASEDIR}/database/{DB_NAME}"
 # Create app
 app =  Flask(__name__)
 
-# Configs
-app.config['SECRET_KEY'] = "randompass12333333"
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DATABASE_PATH}'
+with app.app_context():
+    # Configs
+    app.config['SECRET_KEY'] = "randompass12333333"
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DATABASE_PATH}'
 
-# Base de Dados
-db = SQLAlchemy(app)
+    # Base de Dados
+    db = SQLAlchemy(app)
 
-# Migrações Base de Dados
-migrate = Migrate(app, db)
+    # Migrações Base de Dados
+    migrate = Migrate(app, db)
 
-# Encriptar Dados
-bcrypt = Bcrypt(app)
+    # Encriptar Dados
+    bcrypt = Bcrypt(app)
 
-# Api Auth
-auth = HTTPBasicAuth()
+    # Api Auth
+    auth = HTTPBasicAuth()
 
-# Login Manager
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'admin.login'
-login_manager.login_message_category = 'danger'
-login_manager.needs_refresh_message_category ='danger'
-login_manager.login_message = u'Necessário efetuar login para visualizar esta página'
+    # Login Manager
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+    login_manager.login_view = 'admin.login'
+    login_manager.login_message_category = 'danger'
+    login_manager.needs_refresh_message_category ='danger'
+    login_manager.login_message = u'Necessário efetuar login para visualizar esta página'
 
 
-############# * Routes * ############# 
+    ############# * Routes * ############# 
 
-from .home.routes import home
-from .admin.routes import admin
-from .devices.routes import devices
-from .logs.routes import logs
-from .api.api import api_bp
+    from .home.routes import home
+    from .admin.routes import admin
+    from .devices.routes import devices
+    from .logs.routes import logs
+    from .api.api import api_bp
 
-# Api
-api = Api(api_bp) 
+    # Api
+    api = Api(api_bp) 
 
-############# * Paths * ############# 
-app.register_blueprint(home, url_prefix = '/') # Landing page
-app.register_blueprint(admin, url_prefix = '/utilizadores') # Admin, landing
-app.register_blueprint(devices, url_prefix = '/dispositivos') # Admin, landing
-app.register_blueprint(logs, url_prefix = "/registos") # Registos de abertura de porta
-app.register_blueprint(api_bp) # Api blueprint
+    ############# * Paths * ############# 
+    app.register_blueprint(home, url_prefix = '/') # Landing page
+    app.register_blueprint(admin, url_prefix = '/utilizadores') # Admin, landing
+    app.register_blueprint(devices, url_prefix = '/dispositivos') # Admin, landing
+    app.register_blueprint(logs, url_prefix = "/registos") # Registos de abertura de porta
+    app.register_blueprint(api_bp) # Api blueprint
 
-############# * Models Api * #############
-from .api.api import GetDeviceStatus, PatchDeviceStatus, AddLog, GetCreds
+    ############# * Models Api * #############
+    from .api.api import GetDeviceStatus, PatchDeviceStatus, AddLog, GetCreds
 
-############# * API Endpoints * #############
-api.add_resource(GetDeviceStatus, "/devices_status") # Estadp de dispositivos
-api.add_resource(PatchDeviceStatus, "/device_patch/<int:device_pin>") # Alterar estado de dispositivo
-api.add_resource(AddLog, "/registos/adicionar") # Adicionar logs
-api.add_resource(GetCreds, "/config") # Get config
+    ############# * API Endpoints * #############
+    api.add_resource(GetDeviceStatus, "/devices_status") # Estadp de dispositivos
+    api.add_resource(PatchDeviceStatus, "/device_patch/<int:device_pin>") # Alterar estado de dispositivo
+    api.add_resource(AddLog, "/registos/adicionar") # Adicionar logs
+    api.add_resource(GetCreds, "/config") # Get config
+

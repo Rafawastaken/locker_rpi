@@ -1,4 +1,3 @@
-from enum import unique
 from locker import db
 
 """
