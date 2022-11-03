@@ -1,1 +1,9 @@
-{"users": [{"nome": "Rafael Pimenta", "contacto": "+351960197688"}], "dispositivos": [{"nome": "Porta 1", "id": "porta1", "codigo": "1111", "pino": 22}]}
+{
+  "users": [{ "nome": "Rafael Pimenta", "contacto": "+351960197688" }],
+  "dispositivos": [
+    { "nome": "Porta 1", "id": "porta1", "codigo": "1111", "pino": 3 },
+    { "nome": "Porta 2", "id": "porta2", "codigo": "2222", "pino": 5 },
+    { "nome": "Porta 3", "id": "porta3", "codigo": "3333", "pino": 7 },
+    { "nome": "Porta 4", "id": "porta4", "codigo": "4444", "pino": 11 }
+  ]
+}

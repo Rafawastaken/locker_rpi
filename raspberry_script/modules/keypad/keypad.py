@@ -1,47 +1,133 @@
 import RPi.GPIO as GPIO
 import time
 
-L1 = 5
-L2 = 6
-L3 = 13
-L4 = 19
+from modules.ios.control_gpios import ControlarGpios
 
-C1 = 12
-C2 = 16
-C3 = 20
-# C4 = 21
+class KeypadDriver:
+    def __init__(self, dispositivos:list):
+        # GPIOs Driver
 
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
+        # Linhas Teclado
+        self.L1 = 29 # 5
+        self.L2 = 31 # 6
+        self.L3 = 33 # 13
+        self.L4 = 35 # 19
 
-GPIO.setup(L1, GPIO.OUT)
-GPIO.setup(L2, GPIO.OUT)
-GPIO.setup(L3, GPIO.OUT)
-GPIO.setup(L4, GPIO.OUT)
+        # Colunas Teclado
+        self.C1 = 32 # 12
+        self.C2 = 36 # 16
+        self.C3 = 38 # 20
 
-GPIO.setup(C1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(C2, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(C3, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-# GPIO.setup(C4, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        # helpers
+        self.keypadPressed = -1
+        self.input = ""
+        self.dispositivos = dispositivos
 
-def readLine(line, characters):
-	GPIO.output(line, GPIO.HIGH)
-	if(GPIO.input(C1) == 1):
-    	    print(characters[0])
-	if(GPIO.input(C2) == 1):
-        	    print(characters[1])
-	if(GPIO.input(C3) == 1):
-    	    print(characters[2])
-#	if(GPIO.input(C4) == 1):
-#    	    print(characters[3])
-	GPIO.output(line, GPIO.LOW)
 
-try:
-	while True:
-    	    readLine(L1, ["7","8","9"])
-    	    readLine(L2, ["4","5","6"])
-    	    readLine(L3, ["1","2","3"])
-    	    readLine(L4, ["*","0","#"])
-    	    time.sleep(0.1)
-except KeyboardInterrupt:
-	print("\nApplication stopped!")
+    def setup_pins(self):
+        try:
+            GPIO.setwarnings(False)
+            GPIO.setmode(GPIO.BOARD)
+
+            GPIO.setup(self.L1, GPIO.OUT)
+            GPIO.setup(self.L2, GPIO.OUT)
+            GPIO.setup(self.L3, GPIO.OUT)
+            GPIO.setup(self.L4, GPIO.OUT)
+
+            GPIO.setup(self.C1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+            GPIO.setup(self.C2, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+            GPIO.setup(self.C3, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
+            GPIO.add_event_detect(self.C1, GPIO.RISING, callback=self.keypadCallback)
+            GPIO.add_event_detect(self.C2, GPIO.RISING, callback=self.keypadCallback)
+            GPIO.add_event_detect(self.C3, GPIO.RISING, callback=self.keypadCallback)
+        except Exception as e:
+            print(e)
+
+
+    def keypadCallback(self, channel):
+        if self.keypadPressed == -1:
+            self.keypadPressed = channel
+
+
+    def setAllLines(self, state):
+        GPIO.output(self.L1, state)
+        GPIO.output(self.L2, state)
+        GPIO.output(self.L3, state)
+        GPIO.output(self.L4, state)
+
+   
+    def checkSpecialKeys(self):
+        pressed = False
+
+        GPIO.output(self.L4, GPIO.HIGH)
+
+        if (GPIO.input(self.C3) == 1):
+            print("Input reset!");
+            pressed = True
+
+        GPIO.output(self.L4, GPIO.LOW)
+        GPIO.output(self.L4, GPIO.HIGH)
+
+        if (not pressed and GPIO.input(self.C1) == 1):
+            for dispositivo in self.dispositivos:
+
+                # Verificar se codigo introduzido corresponde com codigo de portas
+                if self.input == dispositivo.get("codigo"):
+                    print(f"Abrir {dispositivo.get('nome')}")
+                    ControlarGpios.ligar(dispositivo.get('pino'))
+
+                    time.sleep(5)
+
+                    print(f"Fechar {dispositivo.get('nome')}")
+                    ControlarGpios.desligar(dispositivo.get('pino'))
+
+                    
+                    break
+                else:
+                    print(f"Codigo errado {dispositivo.get('id')}")
+            pressed = True
+
+        GPIO.output(self.L4, GPIO.LOW)
+
+        if pressed:
+            self.input = ""
+
+        return pressed
+
+
+    def readLine(self, line, characters):
+        GPIO.output(line, GPIO.HIGH)
+
+        if(GPIO.input(self.C1) == 1):
+            self.input = self.input + characters[0]
+            print(self.input)
+
+        if(GPIO.input(self.C2) == 1):
+            self.input = self.input + characters[1]
+            print(self.input)
+
+        if(GPIO.input(self.C3) == 1):
+            self.input = self.input + characters[2]
+            print(self.input)
+
+        GPIO.output(line, GPIO.LOW)
+
+
+    def ler_keypad(self):
+        while True:
+            if self.keypadPressed != -1:
+                self.setAllLines(GPIO.HIGH)
+                if GPIO.input(self.keypadPressed) == 0:
+                    self.keypadPressed = -1
+                else:
+                    time.sleep(0.1)
+            else:
+                if not self.checkSpecialKeys():
+                    self.readLine(self.L1, ["7","8","9"])
+                    self.readLine(self.L2, ["4","5","6"])
+                    self.readLine(self.L3, ["1","2","3"])
+                    self.readLine(self.L4, ["*","0","#"])
+                    time.sleep(0.1)
+                else:
+                    time.sleep(0.1)

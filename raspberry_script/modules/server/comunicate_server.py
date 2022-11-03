@@ -24,6 +24,10 @@ class ComunicarServidor:
 
         # Enviar put request para API
         r = requests.put(endpoint, auth = self.auth, json = data, verify = False)
+
         if r.status_code == 200:
-            return "Log adicionado com sucesso!"
-        return "Ocorreu um problem ao adicionar o log"
+            print("Log adicionado com sucesso!")
+            return True
+
+        print("Ocorreu um problem ao adicionar o log")
+        return False

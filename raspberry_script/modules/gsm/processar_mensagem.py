@@ -17,12 +17,16 @@
 
 # Controlar GPIOS 
 from modules.ios.control_gpios import ControlarGpios
+import RPi.GPIO as GPIO
 from time import sleep
 
 class ProcessarMensagem:
     def __init__(self, gsm_driver, utilizadores_registados:list, dispositivos:list, mensagem, server_com_driver):
+        # Preparar GPIOs
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BOARD)
+
         # Drivers
-        self.gpio_driver = ControlarGpios()
         self.gsm_driver = gsm_driver
         self.server_com_driver = server_com_driver
 
@@ -79,12 +83,12 @@ class ProcessarMensagem:
 
             # validar codigo
             if id_device == device_id_request and codigo_device == codigo_request:    
-                endpoint = "http://192.168.1.65:5000/config/registos/adicionar"
+                endpoint = "http://192.168.1.65:5000/registos/adicionar"
 
                 # Encontrar dispositivo   
 
                 # -> Abrir porta
-                self.gpio_driver.ligar(pino_device)
+                ControlarGpios.ligar(pino_device)
                 # -> Enviar SMS - Porta aberta
                 self.gsm_driver.enviar_msg(f"{device.get('nome').title()} aberta")
                 # -> Enviar LOG
@@ -94,15 +98,15 @@ class ProcessarMensagem:
                 sleep(10)
 
                 # -> Fechar porta
-                self.gpio_driver.desligar(pino_device)
+                ControlarGpios.desligar(pino_device)
                 # Enviar SMS - Porta fechada
                 self.gsm_driver.enviar_msg(f"{device.get('nome').title()} fechada")
                 # Enviar LOG
                 self.server_com_driver.adicionar_log(self.remetente, device.get("nome").title(), "GSM", endpoint)
                 return True
 
-            print("ID de porta ou codigo de acesso errado")
-            return False
+        print("ID de porta ou codigo de acesso errado")
+        return False
 
     # Alterar codigo KEYPAD
     def alterar_codigo_keypad(self, codigo_antigo, codigo_novo):
