@@ -32,7 +32,7 @@ def adicionar_atividade_sample():
 #################### * Registo * ####################
 
 # Visualizar registo de atividade
-@logs.route('/registos-atividadead')
+@logs.route('/registos-atividade')
 @login_required
 def registo_atividade():
     title = "Registos de atividade"

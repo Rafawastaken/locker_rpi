@@ -2,7 +2,7 @@ from flask import Blueprint, request, url_for, redirect, render_template, flash
 from locker import app, db, bcrypt
 from flask_login import login_required
 
-from .models import Devices, Controladores
+from .models import Devices, Controladores, Atualizar
 from .forms import AdicionarDispositivoForm, AdicionarControladorForm
 
 devices = Blueprint('devices', __name__)
@@ -16,6 +16,21 @@ def flash_erros(erros):
     for key, values in erros:
         for value in values:
             flash(f'{value}', "danger")
+
+
+def atualizar_config_db():
+    try:
+        atualizar = Atualizar.query.first()
+        if atualizar:
+            atualizar.atualizar = True
+        else:
+            atualizar = Atualizar(atualizar = True)
+            db.session.add(atualizar)
+        db.session.commit()
+        return True
+    except:
+        return False
+
 
 
 #################### * Controladores * ####################
@@ -182,6 +197,7 @@ def apagar_dispositivo(id):
 #################### * Interaçoes c/ Devices * ####################
 
 @devices.route("/toggle-device/<int:id>", methods = ['POST'])
+@login_required
 def toggle(id):
     device = Devices.query.get_or_404(id)
     if request.method == "POST":
@@ -190,3 +206,13 @@ def toggle(id):
         if device.estado: flash(f"{device.nome} acionado com sucesso!", "success")
         if not device.estado: flash(f"{device.nome} desacionado com sucesso!", "success")
     return redirect(url_for('devices.dispositivos'))
+
+
+#################### * Atualizar config * ####################
+@devices.route('/atualizar-config', methods = ['POST'])
+def atualizar_config():
+    if atualizar_config_db():
+        flash("Pedido para atualizar exectutado com sucesso", "success")
+    else:
+        flash("Ocorreu um erro ao executar o pedido de atualização das configurações", "danger")
+    return redirect(request.referrer)
