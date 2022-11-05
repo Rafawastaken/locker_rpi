@@ -63,12 +63,12 @@ with app.app_context():
     app.register_blueprint(api_bp) # Api blueprint
 
     ############# * Models Api * #############
-    from .api.api import Status, PatchDeviceStatus, AddLog, GetCreds, AtualizarConfig
+    from .api.api import Status, PatchDeviceStatus, AddLog, GetConfig, AtualizarConfig
 
     ############# * API Endpoints * #############
     api.add_resource(Status, "/status") # Estadp de dispositivos
     api.add_resource(PatchDeviceStatus, "/device-patch/<string:device_id>") # Alterar estado de dispositivo
     api.add_resource(AddLog, "/registos/adicionar") # Adicionar logs
-    api.add_resource(GetCreds, "/config") # Get config
+    api.add_resource(GetConfig, "/config") # Get config
     api.add_resource(AtualizarConfig, "/update-status-config")
 
