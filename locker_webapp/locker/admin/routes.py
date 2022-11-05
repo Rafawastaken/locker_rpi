@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request, session
 from .models import User
+from locker.devices.models import Atualizar
 from flask_login import login_required, current_user, logout_user, login_user
 from locker import app, db, bcrypt
 from .forms import RegisterUser, EditarUser, LoginUser
@@ -15,6 +16,20 @@ def flash_erros(erros):
     for key, values in erros:
         for value in values:
             flash(f'{value}', "danger")
+
+
+def atualizar_config_db():
+    try:
+        atualizar = Atualizar.query.first()
+        if atualizar:
+            atualizar.atualizar = True
+        else:
+            atualizar = Atualizar(atualizar = True)
+            db.session.add(atualizar)
+        db.session.commit()
+        return True
+    except:
+        return False
 
 
 #################### * Utilizadores * ####################
@@ -44,6 +59,9 @@ def registar():
         db.session.add(novo_user)
         db.session.commit()
 
+        # Atualizar
+        atualizar_config_db()
+
         flash(f"{form.nome.data} adicionado aos utilizadores!", "success")
         return redirect(url_for('admin.utilizadores'))
     return render_template('/admin/registar.html', form = form, title = title)
@@ -64,6 +82,9 @@ def editar(id):
         user.password = bcrypt.generate_password_hash(form.password.data)
         db.session.commit()
 
+        # Atualizar
+        atualizar_config_db()
+
         flash(f"Utilizador {form.nome.data} atualizado com sucesso!", "success")
         return redirect(url_for('admin.utilizadores'))
     else: # Caso erro ao adicionar user 
@@ -79,6 +100,10 @@ def apagar(id):
     if user and user.id != current_user.id:
         db.session.delete(user)
         db.session.commit()
+
+        # Atualizar
+        atualizar_config_db()
+
         flash("Utilizador removido com sucesso", "success")
         return redirect(url_for('admin.utilizadores'))
     return redirect(url_for('admin.utilizadores'))

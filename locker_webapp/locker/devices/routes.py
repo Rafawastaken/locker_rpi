@@ -80,6 +80,10 @@ def editar_controlador(id):
         controlador.access_name = form.access_name.data
         controlador.key = bcrypt.generate_password_hash(form.access_code.data)
         db.session.commit()
+
+        # Atualizar
+        atualizar_config_db()
+
         flash(f"Controlador {form.nome.data} editar com sucesso!", "success")
         return redirect(url_for('devices.controladores'))
     else: 
@@ -97,6 +101,10 @@ def apagar_controlador(id):
         return redirect(url_for('devices.controladores'))
     db.session.delete(controlador)
     db.session.commit()
+
+    # Atualizar
+    atualizar_config_db()
+
     flash(f"Controlador {controlador.nome} removido com sucesso!", "success")
     return redirect(url_for('devices.controladores'))
 
@@ -139,6 +147,9 @@ def conectar_dispositivo():
         db.session.add(device_add)
         db.session.commit()
 
+        # Atualizar 
+        atualizar_config_db()
+
         # Notificar e finalizar
         flash(f"Dispositivo {nome_disp} no pino {pin_rasp} adicionado com sucesso", "success")
         return redirect(url_for("devices.dispositivos"))
@@ -167,9 +178,13 @@ def editar_dispositivo(id):
         # Guarda a base de dados
         db.session.commit()
 
+        # Atualizar
+        atualizar_config_db()
+
         # Notificar e finalizar
         flash(f"{device.nome} atualizado com sucesso!", "success")
         return redirect(url_for('devices.dispositivos'))
+
     return render_template('dispositivos/devices/editar-device.html', device = device,
         title = title, form = form)    
 
@@ -188,6 +203,9 @@ def apagar_dispositivo(id):
     # Remover dispositivo da base de dados
     db.session.delete(device)
     db.session.commit()
+
+    # Atualizar
+    atualizar_config_db()
     
     # Notificar e finalizar
     flash("Dispositivo removido do servidor.","success")

@@ -3,8 +3,6 @@ from flask_login import current_user, login_required
 from .models import LogsAtividade
 from locker import app, db
 
-import random
-
 logs = Blueprint('logs', __name__)
 
 
@@ -16,18 +14,6 @@ def flash_erros(erros):
     for key, values in erros:
         for value in values:
             flash(f'{value}', "danger")
-
-def adicionar_atividade_sample():
-    for x in range(50):
-        entry = LogsAtividade(
-            utilizador = current_user.nome,
-            dispositivo = f"Porta {random.randint(1,4)}",
-            origem = "Servidor"
-        )
-
-        db.session.add(entry)
-    db.session.commit()
-
 
 #################### * Registo * ####################
 
