@@ -67,24 +67,30 @@
         </li>
         <!-- Fim Dropdown -->
       </ul>
-      <!-- Atualizar creds -->
-      <form action="{{url_for('devices.atualizar_config')}}" method="POST">
-        <button
-          href=""
-          title="Atualizar Creds"
-          class="nav-link btn btn-outline-primary text-light px-3 m-2"
-          type="submit"
-        >
-          <i class="bi bi-arrow-clockwise"></i>
-        </button>
-      </form>
-      <!-- Logout -->
-      <a
-        href="{{url_for('admin.logout')}}"
-        title="Terminar Sessão"
-        class="nav-link btn btn-outline-secondary text-light px-3 m-2"
-        ><i class="bi bi-box-arrow-right"></i
-      ></a>
+      <div class="row">
+        <!-- Atualizar creds -->
+        <div class="col-6">
+          <form action="{{url_for('devices.atualizar_config')}}" method="POST">
+            <button
+              href=""
+              title="Atualizar Configurações Raspberry"
+              class="nav-link btn btn-outline-primary text-light px-3 m-2 form-control"
+              type="submit"
+            >
+              <i class="bi bi-arrow-clockwise"></i>
+            </button>
+          </form>
+        </div>
+        <!-- Logout -->
+        <div class="col-6">
+          <a
+            href="{{url_for('admin.logout')}}"
+            title="Terminar Sessão"
+            class="nav-link btn btn-outline-secondary text-light px-3 m-2"
+            ><i class="bi bi-box-arrow-right"></i
+          ></a>
+        </div>
+      </div>
       {% endif %}
     </div>
   </div>
