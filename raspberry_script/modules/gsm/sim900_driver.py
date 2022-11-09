@@ -77,7 +77,6 @@ class DriverSIM900:
 
     # Funcao que aguarda receber mensagem e retorna o seu conteudo
     def receber_msg(self):         
-        print("Aguardar mensagem...")
         self.gsm.write('AT+CNMI=1,2,0,0,0\r'.encode())
         self.resp = self.gsm.read(1000).decode()
 

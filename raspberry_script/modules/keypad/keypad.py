@@ -4,8 +4,10 @@ import time
 from modules.ios.control_gpios import ControlarGpios
 
 class KeypadDriver:
-    def __init__(self, dispositivos:list):
-        # GPIOs Driver
+    def __init__(self, dispositivos:list, logs_endpoint:str, server_com):
+        # Server communication setup
+        self.logs_endpoint = logs_endpoint
+        self.server_com_driver = server_com
 
         # Linhas Teclado
         self.L1 = 29 # 5
@@ -75,14 +77,25 @@ class KeypadDriver:
                 # Verificar se codigo introduzido corresponde com codigo de portas
                 if self.input == dispositivo.get("codigo"):
                     print(f"Abrir {dispositivo.get('nome')}")
-                    ControlarGpios.ligar(dispositivo.get('pino'))
+
+                    # Controlar GPIO - Abrir 
+                    ControlarGpios.abrir(dispositivo.get('pino'))
+
+                    # Adicionar log
+                    self.server_com_driver.adicionar_log(f"{dispositivo.get('nome')}", dispositivo.get("nome") + " - Aberta", "Código", self.logs_endpoint)
 
                     time.sleep(5)
 
                     print(f"Fechar {dispositivo.get('nome')}")
-                    ControlarGpios.desligar(dispositivo.get('pino'))
 
+                    # Controlar GPIO - Fechar
+                    ControlarGpios.fechar(dispositivo.get('pino'))
                     
+                    # Adicionar log
+                    self.server_com_driver.adicionar_log(f"{dispositivo.get('nome')}",  dispositivo.get("nome") + " - Fechada", "Código", self.logs_endpoint)
+                    
+
+                    print("-" * 30)
                     break
                 else:
                     print(f"Codigo errado {dispositivo.get('id')}")
@@ -115,19 +128,18 @@ class KeypadDriver:
 
 
     def ler_keypad(self):
-        while True:
-            if self.keypadPressed != -1:
-                self.setAllLines(GPIO.HIGH)
-                if GPIO.input(self.keypadPressed) == 0:
-                    self.keypadPressed = -1
-                else:
-                    time.sleep(0.1)
+        if self.keypadPressed != -1:
+            self.setAllLines(GPIO.HIGH)
+            if GPIO.input(self.keypadPressed) == 0:
+                self.keypadPressed = -1
             else:
-                if not self.checkSpecialKeys():
-                    self.readLine(self.L1, ["7","8","9"])
-                    self.readLine(self.L2, ["4","5","6"])
-                    self.readLine(self.L3, ["1","2","3"])
-                    self.readLine(self.L4, ["*","0","#"])
-                    time.sleep(0.1)
-                else:
-                    time.sleep(0.1)
+                time.sleep(0.1)
+        else:
+            if not self.checkSpecialKeys():
+                self.readLine(self.L1, ["7","8","9"])
+                self.readLine(self.L2, ["4","5","6"])
+                self.readLine(self.L3, ["1","2","3"])
+                self.readLine(self.L4, ["*","0","#"])
+                time.sleep(0.1)
+            else:
+                time.sleep(0.1)

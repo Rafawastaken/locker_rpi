@@ -8,10 +8,10 @@ import RPi.GPIO as GPIO
 
 class ControlarGpios:
 
-    def ligar(pino:int):
+    def abrir(pino:int):
         GPIO.setup(pino, GPIO.OUT, initial=GPIO.LOW)
         GPIO.output(pino, GPIO.HIGH)
 
-    def desligar(pino:int):
+    def fechar(pino:int):
         GPIO.setup(pino, GPIO.OUT, initial=GPIO.LOW)
         GPIO.output(pino, GPIO.LOW)

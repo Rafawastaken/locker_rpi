@@ -5,12 +5,12 @@
         - SALDO
             -> Responde com mensagen saldo atual
 
-        - ABRIR -> abrir#nome porta#codigo
+        - ABRIR -> abrir#id_porta#codigo
             -> Abrir porta X
             -> Responde com "porta aberta"
             -> Responde com "porta fechada"
 
-        - CODIGO -> codigo#codigo_antigo#novo_codigo
+        - CODIGO -> codigo#id_porta#novo_codigo
             -> Altera codigo atual para novo codigo 
             -> Responde com codigo alterdo com sucesso
 """
@@ -21,13 +21,18 @@ import RPi.GPIO as GPIO
 from time import sleep
 
 class ProcessarMensagem:
-    def __init__(self, gsm_driver, utilizadores_registados:list, dispositivos:list, mensagem, server_com_driver):
+    def __init__(self, gsm_driver, utilizadores_registados:list, dispositivos:list, 
+        mensagem, log_endpoint:str, server_logs_driver, server_com_driver):
         # Preparar GPIOs
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BOARD)
 
+        # Constantes
+        self.log_endpoint = log_endpoint
+
         # Drivers
         self.gsm_driver = gsm_driver
+        self.server_logs_driver = server_logs_driver
         self.server_com_driver = server_com_driver
 
         # utilizadores registados
@@ -76,45 +81,52 @@ class ProcessarMensagem:
         codigo_request = str(self.conteudo[2]).replace(" ", "")
         
         for device in self.dispositivos_registados:
-            nome_device = device.get('nome')
+            nome = device.get('nome').title()
             id_device = device.get('id').lower()
             codigo_device = device.get('codigo')
             pino_device = device.get('pino')
 
             # validar codigo
-            if id_device == device_id_request and codigo_device == codigo_request:    
-                endpoint = "http://192.168.1.65:5000/registos/adicionar"
-
-                # Encontrar dispositivo   
-
+            if id_device == device_id_request and codigo_device == codigo_request:  
                 # -> Abrir porta
-                ControlarGpios.ligar(pino_device)
+                ControlarGpios.abrir(pino_device)
                 # -> Enviar SMS - Porta aberta
-                self.gsm_driver.enviar_msg(f"{device.get('nome').title()} aberta")
+                self.gsm_driver.enviar_msg(f"{nome} aberta")
                 # -> Enviar LOG
-                self.server_com_driver.adicionar_log(self.remetente, device.get("nome").title(), "GSM", endpoint)
+                self.server_logs_driver.adicionar_log(self.remetente, nome + " - Aberta", "GSM", self.log_endpoint)
                 
                 # -> DELAY
                 sleep(10)
 
                 # -> Fechar porta
-                ControlarGpios.desligar(pino_device)
+                ControlarGpios.fechar(pino_device)
                 # Enviar SMS - Porta fechada
-                self.gsm_driver.enviar_msg(f"{device.get('nome').title()} fechada")
+                self.gsm_driver.enviar_msg(f"{device.get('nome').title()} - Fechada")
                 # Enviar LOG
-                self.server_com_driver.adicionar_log(self.remetente, device.get("nome").title(), "GSM", endpoint)
+                self.server_logs_driver.adicionar_log(self.remetente, nome + "- Fechada", "GSM", self.log_endpoint)
+
                 return True
 
         print("ID de porta ou codigo de acesso errado")
         return False
 
     # Alterar codigo KEYPAD
-    def alterar_codigo_keypad(self, codigo_antigo, codigo_novo):
+    def alterar_codigo_keypad(self, id_porta, novo_codigo):
         # Verificar se utilizador se encontra registado
-        if self.verificar_remetente():
-            # * Adicionar codigo para processar creds e alterar data *
-            self.gsm_driver.enviar_msg(f"Codigo da porta X alterado de {codigo_antigo} para {codigo_novo}")
+        id_porta = id_porta.lower().replace(" ", "")
+        novo_codigo = novo_codigo.replace(" ", "")
 
+        if self.verificar_remetente():
+            # Verificar se codigo nao esta a ser utilizado por outra porta
+            for dispositivo in self.dispositivos_registados:
+                codigo_dispositivo = dispositivo.get('codigo')
+                nome_dispositivo = dispositivo.get('nome')
+                if novo_codigo == codigo_dispositivo:
+                    print(f"Codigo [{novo_codigo}] a ser utilizador por {nome_dispositivo}")
+                    return False
+
+            self.server_com_driver.alterar_codigo(id_porta, novo_codigo)
+            return True
 
     # Interpretar pedido de mensagme
     def interpretar_mensagem(self):
@@ -129,13 +141,13 @@ class ProcessarMensagem:
             self.controlar_porta_gsm()
             
         # Processar pedido para altearar codigo de keypad
-        elif "codigo" in self.conteudo:
+        elif "codigo" in self.conteudo or "código" in self.conteudo:
             try:
                 parser = self.conteudo.split("#")
-                codigo_antigo = parser[1]
-                codigo_novo = parser[2]
+                id_porta = parser[1]
+                novo_codigo = parser[2]
 
-                self.alterar_codigo_keypad(codigo_antigo, codigo_novo)
+                self.alterar_codigo_keypad(id_porta, novo_codigo)
             except Exception as e:
                 print(e)
                 self.gsm_driver.enviar_msg("Impossivel alterar codigo pretendido")

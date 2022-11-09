@@ -2,7 +2,7 @@ import requests
 import json
 import os
 
-class ComunicarServidor:
+class AdicionarLogServidor:
     def __init__(self, access_name:str, access_key:str):
         # Validacao api
         self.access_name = access_name
